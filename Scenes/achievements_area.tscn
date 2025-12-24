@@ -1,0 +1,133 @@
+[gd_scene load_steps=5 format=3 uid="uid://duvttncvgjmvc"]
+
+[ext_resource type="Script" uid="uid://bcsmnmcjwasr1" path="res://Scripts/achievements_area.gd" id="1_b4or2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gvjpk"]
+bg_color = Color(0.27450982, 0.27450982, 0.27450982, 1)
+border_color = Color(0.27450982, 0.27450982, 0.27450982, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q0k48"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.27450982, 0.27450982, 0.27450982, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b4or2"]
+content_margin_top = 40.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[node name="Achievements Area" type="Control" node_paths=PackedStringArray("achievements_v_box", "achievements_completed_info")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_b4or2")
+achievements_v_box = NodePath("PanelContainerBackgroud/PanelContainer/MainVBoxContainer/ScrollContainer/AchievementsVBox")
+achievements_completed_info = NodePath("PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer/AchievementsCompletedInfo")
+
+[node name="PanelContainerBackgroud" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gvjpk")
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainerBackgroud"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_q0k48")
+
+[node name="MainVBoxContainer" type="VBoxContainer" parent="PanelContainerBackgroud/PanelContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 38
+text = "Achievements"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="AchievementsVBox" type="VBoxContainer" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/ScrollContainer"]
+custom_minimum_size = Vector2(250, 250)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_b4or2")
+
+[node name="InfoVBoxContainer" type="VBoxContainer" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="StatsLabel" type="Label" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Stats"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer"]
+layout_mode = 2
+
+[node name="AchievementsCompletedLabel" type="Label" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Achievements completed:"
+
+[node name="Control" type="Control" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AchievementsCompletedInfo" type="Label" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "0/25"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Another stat:"
+
+[node name="Control" type="Control" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Yes"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer"]
+layout_mode = 2
+
+[node name="Save" type="Button" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Save"
+
+[node name="Load" type="Button" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Load"
+
+[node name="Reset" type="Button" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Reset"
+
+[connection signal="pressed" from="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3/Save" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3/Load" to="." method="_on_load_pressed"]
+[connection signal="pressed" from="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3/Reset" to="." method="_on_reset_pressed"]

@@ -1,0 +1,112 @@
+[gd_scene load_steps=13 format=4 uid="uid://cgob5xhjyvg0e"]
+
+[ext_resource type="PackedScene" uid="uid://fx314jepvcdf" path="res://Scenes/player.tscn" id="2_y4dr7"]
+[ext_resource type="Texture2D" uid="uid://dqvjd5f8lxejg" path="res://Assets/Art/colored-tile-set.png" id="3_didp7"]
+[ext_resource type="Texture2D" uid="uid://cqucetrdg2ige" path="res://Assets/Art/ladder.png" id="4_4iphx"]
+[ext_resource type="Texture2D" uid="uid://nr4l8qq7afjx" path="res://Assets/Art/spikes.png" id="4_didp7"]
+[ext_resource type="PackedScene" uid="uid://b5gbvu0fgx3f6" path="res://Scenes/area_limit.tscn" id="5_didp7"]
+[ext_resource type="PackedScene" uid="uid://bt6eq5c6omec0" path="res://Scenes/camera_2d.tscn" id="5_y4dr7"]
+[ext_resource type="PackedScene" uid="uid://treoea80upm6" path="res://Scenes/coin.tscn" id="7_2a60c"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wrm1d"]
+texture = ExtResource("3_didp7")
+texture_region_size = Vector2i(32, 32)
+0:0/next_alternative_id = 5
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jgkgd"]
+texture = ExtResource("4_4iphx")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/custom_data_0 = true
+
+[sub_resource type="TileSet" id="TileSet_3dryh"]
+tile_size = Vector2i(32, 32)
+physics_layer_0/collision_layer = 1
+physics_layer_0/collision_mask = 2
+custom_data_layer_0/name = "climbable"
+custom_data_layer_0/type = 1
+sources/0 = SubResource("TileSetAtlasSource_wrm1d")
+sources/1 = SubResource("TileSetAtlasSource_jgkgd")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_didp7"]
+texture = ExtResource("4_didp7")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, 9.025415, 16, 8.960716, 16, 16, -16, 16)
+
+[sub_resource type="TileSet" id="TileSet_2a60c"]
+tile_size = Vector2i(32, 32)
+physics_layer_0/collision_layer = 8
+physics_layer_0/collision_mask = 2
+sources/0 = SubResource("TileSetAtlasSource_didp7")
+
+[node name="Level1" type="Node"]
+metadata/_edit_horizontal_guides_ = [352.0]
+
+[node name="CharacterBody2D" parent="." node_paths=PackedStringArray("environment_tile_map_layer") instance=ExtResource("2_y4dr7")]
+position = Vector2(319, 300)
+environment_tile_map_layer = NodePath("../TileMaps/MapTileMapLayer")
+
+[node name="TileMaps" type="Node" parent="."]
+
+[node name="MapTileMapLayer" type="TileMapLayer" parent="TileMaps"]
+tile_map_data = PackedByteArray("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")
+tile_set = SubResource("TileSet_3dryh")
+
+[node name="LethalTileMapLayer" type="TileMapLayer" parent="TileMaps"]
+tile_map_data = PackedByteArray("AADv/wkAAAAAAAAAAADw/wkAAAAAAAAAAAAPAAkAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_2a60c")
+
+[node name="LevelLimits" type="Node" parent="."]
+
+[node name="AreaLimit1" parent="LevelLimits" instance=ExtResource("5_didp7")]
+visible = false
+position = Vector2(320, 160)
+scale = Vector2(32, 19.2)
+
+[node name="AreaLimit2" parent="LevelLimits" instance=ExtResource("5_didp7")]
+visible = false
+position = Vector2(-336, 176)
+scale = Vector2(30.345, 17.5)
+
+[node name="Transition1-2" parent="LevelLimits" instance=ExtResource("5_didp7")]
+visible = false
+position = Vector2(-16, 32)
+scale = Vector2(4.4, 3.21)
+
+[node name="Camera2D" parent="." instance=ExtResource("5_y4dr7")]
+position = Vector2(584, -251)
+
+[node name="Coins" type="Node" parent="."]
+
+[node name="Coin" parent="Coins" instance=ExtResource("7_2a60c")]
+position = Vector2(305, 53)
+collectable_id = "coin1"
+
+[node name="Coin2" parent="Coins" instance=ExtResource("7_2a60c")]
+position = Vector2(381, 169)
+collectable_id = "coin2"
+
+[node name="Coin3" parent="Coins" instance=ExtResource("7_2a60c")]
+position = Vector2(-166, 53)
+collectable_id = "coin3"
+
+[node name="Coin4" parent="Coins" instance=ExtResource("7_2a60c")]
+position = Vector2(-583, 263)
+collectable_id = "coin4"
+
+[node name="Coin5" parent="Coins" instance=ExtResource("7_2a60c")]
+position = Vector2(582, 261)
+collectable_id = "coin5"
