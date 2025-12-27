@@ -20,6 +20,7 @@ SaveDataManager="*res://Managers/save_data_manager.gd"
 CollectablesManager="*res://Managers/collectables_manager.gd"
 StatsManager="*res://Managers/stats_manager.gd"
 AchievementManager="*res://Managers/achievement_manager.gd"
+GameConfigManager="*res://Managers/game_config_manager.gd"
 
 [debug]
 

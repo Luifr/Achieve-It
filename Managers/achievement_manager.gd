@@ -6,7 +6,7 @@ var all_achievements: Array[Achievement] = []
 var stat_achievements_hash: Dictionary[String, AchievementsArray]
 var collectable_achievements_hash: Dictionary[String, AchievementsArray]
 
-const ACHIEVEMENTS_FILE_PATH = "res://data/achievements.json"
+const ACHIEVEMENTS_FILE_PATH = "res://Data/achievements.json"
 
 signal achievement_unlocked(achievement: Achievement)
 

@@ -106,4 +106,5 @@ visible = false
 layout_mode = 1
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Play Button" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Settings Button" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Quit Button" to="." method="_on_quit_button_pressed"]
