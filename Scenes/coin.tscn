@@ -7,7 +7,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_jgi06"]
 radius = 7.0
 
-[node name="Coin" type="Node2D"]
+[node name="Coin" type="Node2D" groups=["collectable"]]
 script = ExtResource("1_jgi06")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

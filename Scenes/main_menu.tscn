@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://co5e4q0jguxgk"]
+[gd_scene load_steps=5 format=3 uid="uid://co5e4q0jguxgk"]
 
 [ext_resource type="Texture2D" uid="uid://cirx3mnf751k1" path="res://Assets/Art/octopus-0001.png" id="1_28flt"]
 [ext_resource type="Script" uid="uid://cjdn2oiltkf6u" path="res://Scripts/main_menu.gd" id="1_48xlc"]
+[ext_resource type="PackedScene" uid="uid://dcprp8tauavip" path="res://Scenes/choose_your_save.tscn" id="3_1ehe0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7vrkn"]
 content_margin_left = 0.0
@@ -15,7 +16,7 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 corner_detail = 5
 
-[node name="Menu Root" type="Control"]
+[node name="Menu Root" type="Control" node_paths=PackedStringArray("choose_your_save")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,6 +24,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_48xlc")
+choose_your_save = NodePath("Choose your save")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -99,4 +101,9 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Quit"
 
+[node name="Choose your save" parent="." instance=ExtResource("3_1ehe0")]
+visible = false
+layout_mode = 1
+
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Play Button" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Quit Button" to="." method="_on_quit_button_pressed"]

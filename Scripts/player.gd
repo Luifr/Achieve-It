@@ -42,6 +42,9 @@ func reparent_camera() -> void:
 func _ready() -> void:
 	call_deferred("reparent_camera")
 	initial_position = position
+	
+	if SaveDataManager.loaded_data.player_position != Vector2.INF:
+		position = SaveDataManager.loaded_data.player_position
 
 func _physics_process(delta: float) -> void:
 	var on_floor: bool = is_on_floor()
@@ -58,6 +61,7 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("jump") and time_since_left_floor < MAX_JUMP_DELAY_AFTER_NOT_ON_FLOOR and !is_jumping:
 		is_jumping = true
+		StatsManager.increment_stat(Stats.StatType.JUMP)
 		velocity.y = MAX_JUMP_VELOCITY/JUMP_VELOCITY_DIVISOR
 		jump_velocity_used = MAX_JUMP_VELOCITY/JUMP_VELOCITY_DIVISOR
 	elif on_floor and is_jumping:
@@ -126,6 +130,6 @@ func get_tile_under_player(tilemap: TileMapLayer) -> TileData:
 	return tilemap.get_cell_tile_data(cell)
 
 func die() -> void:
-	StatsManager.increment_stat("death")
+	StatsManager.increment_stat(Stats.StatType.DEATH)
 	audio_stream_player_2d.play()
 	position = initial_position

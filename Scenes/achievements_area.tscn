@@ -27,7 +27,7 @@ corner_detail = 5
 content_margin_top = 40.0
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
-[node name="Achievements Area" type="Control" node_paths=PackedStringArray("achievements_v_box", "achievements_completed_info")]
+[node name="Achievements Area" type="Control" node_paths=PackedStringArray("achievements_v_box", "achievements_completed_info", "current_profile_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,6 +37,7 @@ grow_vertical = 2
 script = ExtResource("1_b4or2")
 achievements_v_box = NodePath("PanelContainerBackgroud/PanelContainer/MainVBoxContainer/ScrollContainer/AchievementsVBox")
 achievements_completed_info = NodePath("PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer/AchievementsCompletedInfo")
+current_profile_label = NodePath("PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3/CurrentProfileLabel")
 
 [node name="PanelContainerBackgroud" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -116,18 +117,27 @@ text = "Yes"
 [node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer"]
 layout_mode = 2
 
+[node name="CurrentProfileLabel" type="Label" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3"]
+layout_mode = 2
+
 [node name="Save" type="Button" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3"]
 layout_mode = 2
+focus_mode = 0
 text = "Save"
 
 [node name="Load" type="Button" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3"]
 layout_mode = 2
+focus_mode = 0
 text = "Load"
 
-[node name="Reset" type="Button" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3"]
+[node name="Spacer" type="Control" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3"]
 layout_mode = 2
-text = "Reset"
+size_flags_horizontal = 3
+
+[node name="Back" type="Button" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Back"
 
 [connection signal="pressed" from="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3/Save" to="." method="_on_save_pressed"]
 [connection signal="pressed" from="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3/Load" to="." method="_on_load_pressed"]
-[connection signal="pressed" from="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3/Reset" to="." method="_on_reset_pressed"]
+[connection signal="pressed" from="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3/Back" to="." method="_on_back_pressed"]

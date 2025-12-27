@@ -1,0 +1,135 @@
+[gd_scene load_steps=6 format=3 uid="uid://dcprp8tauavip"]
+
+[ext_resource type="Script" uid="uid://cuuv3h8tgf676" path="res://Scripts/choose_your_save.gd" id="1_iqt4c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1s8ws"]
+bg_color = Color(0.14901961, 0.047058824, 0.19215687, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iqt4c"]
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ffpk4"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_skytf"]
+content_margin_bottom = 50.0
+bg_color = Color(0.14901961, 0.047058824, 0.19215687, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+
+[node name="Choose your save" type="Panel" node_paths=PackedStringArray("save_slots_v_box", "create_save_profile_modal", "profile_name_input", "profile_form_error_label", "create_new_save_button")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1s8ws")
+script = ExtResource("1_iqt4c")
+save_slots_v_box = NodePath("PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer")
+create_save_profile_modal = NodePath("CreateSaveProfileModal")
+profile_name_input = NodePath("CreateSaveProfileModal/VBoxContainer/ProfileNameInput")
+profile_form_error_label = NodePath("CreateSaveProfileModal/VBoxContainer/ProfileFormErrorLabel")
+create_new_save_button = NodePath("PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/CreateNewSaveButton")
+
+[node name="TitleContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.2
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_iqt4c")
+
+[node name="Title" type="Label" parent="TitleContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 40
+text = "Choose your save"
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.2
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ffpk4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(50, 300)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/ScrollContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CreateNewSaveButton" type="Button" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "Create new save"
+
+[node name="BackButton" type="Button" parent="PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_vertical = 4
+text = "Back"
+
+[node name="CreateSaveProfileModal" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2
+anchor_top = 0.2
+anchor_right = 0.8
+anchor_bottom = 0.8
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_skytf")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreateSaveProfileModal"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Control2" type="Control" parent="CreateSaveProfileModal/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ProfileNameInput" type="LineEdit" parent="CreateSaveProfileModal/VBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+placeholder_text = "Enter your save name"
+
+[node name="ProfileFormErrorLabel" type="Label" parent="CreateSaveProfileModal/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.55890036, 0.14171836, 0.25127068, 1)
+
+[node name="Control" type="Control" parent="CreateSaveProfileModal/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CreateSaveProfileModal/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 100
+
+[node name="ConfirmButton" type="Button" parent="CreateSaveProfileModal/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Confirm"
+
+[node name="CancelButton" type="Button" parent="CreateSaveProfileModal/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Cancel"
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/CreateNewSaveButton" to="." method="_on_create_new_save_button_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="text_submitted" from="CreateSaveProfileModal/VBoxContainer/ProfileNameInput" to="." method="_on_profile_name_input_text_submitted"]
+[connection signal="pressed" from="CreateSaveProfileModal/VBoxContainer/HBoxContainer/ConfirmButton" to="." method="_on_confirm_button_pressed"]
+[connection signal="pressed" from="CreateSaveProfileModal/VBoxContainer/HBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]

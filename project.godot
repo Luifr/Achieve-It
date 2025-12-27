@@ -11,14 +11,15 @@ config_version=5
 [application]
 
 config/name="Achieve it"
-run/main_scene="uid://drlpxnsx3p7x0"
+run/main_scene="uid://co5e4q0jguxgk"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 
 [autoload]
 
 SaveDataManager="*res://Managers/save_data_manager.gd"
-AchievementManager="*res://Managers/achievement_manager.gd"
+CollectablesManager="*res://Managers/collectables_manager.gd"
 StatsManager="*res://Managers/stats_manager.gd"
+AchievementManager="*res://Managers/achievement_manager.gd"
 
 [debug]
 
@@ -35,6 +36,7 @@ window/stretch/mode="canvas_items"
 camera="Camera global group"
 ui_right_panel=""
 player=""
+collectable=""
 
 [gui]
 

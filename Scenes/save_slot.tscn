@@ -1,0 +1,36 @@
+[gd_scene load_steps=2 format=3 uid="uid://bevkundhur8ab"]
+
+[ext_resource type="Script" uid="uid://b3svmrhyoeng6" path="res://Scripts/save_slot.gd" id="1_rn4jt"]
+
+[node name="Save slot" type="PanelContainer" node_paths=PackedStringArray("profile_name_label")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rn4jt")
+profile_name_label = NodePath("SaveSlotHBoxContainer/ProfileNameLabel")
+
+[node name="SaveSlotHBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="ProfileNameLabel" type="Label" parent="SaveSlotHBoxContainer"]
+layout_mode = 2
+text = "name placeholder"
+
+[node name="Spacer" type="Control" parent="SaveSlotHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LoadButton" type="Button" parent="SaveSlotHBoxContainer"]
+layout_mode = 2
+text = "Load"
+
+[node name="DeleteButton" type="Button" parent="SaveSlotHBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Delete"
+
+[connection signal="pressed" from="SaveSlotHBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="SaveSlotHBoxContainer/DeleteButton" to="." method="_on_delete_button_pressed"]

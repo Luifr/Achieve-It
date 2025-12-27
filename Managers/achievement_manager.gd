@@ -1,19 +1,23 @@
 extends Node
 
-var all_achievements: Array[Dictionary] = []
+var all_achievements: Array[Achievement] = []
 
-# TODO: create a Dicitonary for triggered achievements
-# TODO: move completed achievements to another Dictionary as they dont have to be checked
-# Dictionary[String, Array[Achievement]
-var stat_achievements_hash: Dictionary[String, Array]
+# TODO: create a Dictionary for triggered achievements
+var stat_achievements_hash: Dictionary[String, AchievementsArray]
+var collectable_achievements_hash: Dictionary[String, AchievementsArray]
 
 const ACHIEVEMENTS_FILE_PATH = "res://data/achievements.json"
 
-signal achievement_unlocked(achievement: Dictionary)
+signal achievement_unlocked(achievement: Achievement)
 
 # Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	StatsManager.stat_changed.connect(try_unlock_stat_target_achievements)
+func ready() -> void:
+	if !StatsManager.stat_changed.is_connected(try_unlock_stat_target_achievements):
+		StatsManager.stat_changed.connect(try_unlock_stat_target_achievements)
+
+	if !CollectablesManager.collectable_collected.is_connected(try_unlock_collectable_target_achievements):
+		CollectablesManager.collectable_collected.connect(try_unlock_collectable_target_achievements)
+
 	prepare_achievements()
 
 func prepare_achievements() -> void:
@@ -41,51 +45,67 @@ func load_achievements_from_json() -> Array:
 func process_achievements_json(json_data: Array) -> void:
 	for index in range(json_data.size()):
 		var entry_variant: Variant = json_data[index]
-		if !entry_variant is Dictionary or !entry_variant.has("unlock_type"):
-			print("Invalid data at index " + str(index) + ", while parsing achievements JSON")
+		if !(entry_variant is Dictionary) or !Achievement.is_valid_achievement_data(entry_variant):
+			push_error("Invalid data at index " + str(index) + ", while parsing achievements JSON")
 			continue
 
-		var entry: Dictionary = entry_variant
-		
-		var can_unlock := check_stat_target_achievement(entry)
-		print(can_unlock)
-		if can_unlock:
-			entry.unlocked = true
-		
+		var entry := Achievement.new().from_dictionary(entry_variant)
+
 		all_achievements.append(entry)
-		
-		if entry.unlock_type == "stat_target":
+
+		if entry.unlock_type == Achievement.UnlockType.STAT_TARGET:
+			if check_stat_target_achievement(entry):
+				entry.unlocked = true
 			
-			var stat_name: String = entry["stat_name"]
-			if !stat_achievements_hash.has(stat_name):
-				stat_achievements_hash.set(stat_name, [])
-			stat_achievements_hash[stat_name].append(entry)
-	
+			var target_name: String = entry.target_name
+			if !stat_achievements_hash.has(target_name):
+				stat_achievements_hash.set(target_name, AchievementsArray.new())
+			stat_achievements_hash[target_name].achievements.append(entry)
+		elif entry.unlock_type == Achievement.UnlockType.COLLECTABLE_TARGET:
+			if check_collectable_target_achievement(entry):
+				entry.unlocked = true
+
+			var collectable_type: String = entry.target_name
+			if !collectable_achievements_hash.has(collectable_type):
+				collectable_achievements_hash.set(collectable_type, AchievementsArray.new())
+			collectable_achievements_hash[collectable_type].achievements.append(entry)
+
 	for key: String in stat_achievements_hash.keys():
-		stat_achievements_hash[key].sort_custom(sort_target_ascending)
+		stat_achievements_hash[key].achievements.sort_custom(
+			AchievementsArray.sort_target_ascending
+		)
 
-func sort_target_ascending(dictionaryA: Dictionary, dictionaryB: Dictionary) -> bool:
-	if dictionaryA["stat_target"] < dictionaryB["stat_target"]:
-		return true
-	return false
-
-func is_achievement_unlocked(achievement: Dictionary) -> bool:
+func is_achievement_unlocked(achievement: Achievement) -> bool:
 	return achievement.unlocked
 
-func check_stat_target_achievement(achievement: Dictionary) -> bool:
+func check_stat_target_achievement(achievement: Achievement) -> bool:
 	if achievement.unlocked:
 		return achievement.unlocked
 	
-	if achievement.unlock_type != "stat_target":
+	if achievement.unlock_type != Achievement.UnlockType.STAT_TARGET:
 		return false
 	
-	return StatsManager.stats.get(achievement.stat_name, 0) >= achievement.stat_target
+	return StatsManager.stats[achievement.target_name] >= achievement.value_target
 
-func try_unlock_stat_target_achievements(stat_name: String, new_value: Variant) -> void:
-	if !stat_achievements_hash.has(stat_name):
+func check_collectable_target_achievement(achievement: Achievement) -> bool:
+	if achievement.unlocked:
+		return achievement.unlocked
+	
+	if achievement.unlock_type != Achievement.UnlockType.COLLECTABLE_TARGET:
+		return false
+
+	if !CollectablesManager.collectables_per_type.has(achievement.target_name):
+		return false
+	
+	return CollectablesManager.collectables_per_type[achievement.target_name].collectables.filter(
+		func(collectable: Collectable) -> bool: return collectable.is_collected
+	).size() >= achievement.value_target
+
+func try_unlock_stat_target_achievements(target_name: String, new_value: Variant) -> void:
+	if !stat_achievements_hash.has(target_name):
 		return
 	
-	for achievement: Dictionary in stat_achievements_hash[stat_name]:
+	for achievement: Achievement in stat_achievements_hash[target_name].achievements:
 		if achievement.unlocked:
 			continue
 		
@@ -93,5 +113,18 @@ func try_unlock_stat_target_achievements(stat_name: String, new_value: Variant) 
 		if can_unlock:
 			achievement.unlocked = true
 			achievement_unlocked.emit(achievement)
-		elif achievement.stat_target > new_value:
+		elif achievement.value_target > new_value:
 			return
+
+func try_unlock_collectable_target_achievements(_collectable_id: String, collectable_type: String) -> void:
+	if !collectable_achievements_hash.has(collectable_type):
+		return
+	
+	for achievement: Achievement in collectable_achievements_hash[collectable_type].achievements:
+		if achievement.unlocked:
+			continue
+		
+		var can_unlock := check_collectable_target_achievement(achievement)
+		if can_unlock:
+			achievement.unlocked = true
+			achievement_unlocked.emit(achievement)

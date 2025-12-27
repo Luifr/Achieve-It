@@ -2,57 +2,33 @@
 	{
 		"title": "What happened?",
 		"description": "There is a first time for everything",
-		"unlock_type": "stat_target",
-		"stat_name": "death",
-		"stat_target": 1,
+		"unlock_type": "value_target",
+		"target_name": "death",
+		"value_target": 1,
 		"unlocked": false
 	},
 	{
 		"title": "Again?",
 		"description": "There is a fifth time for everything",
-		"unlock_type": "stat_target",
-		"stat_name": "death",
-		"stat_target": 5,
+		"unlock_type": "value_target",
+		"target_name": "death",
+		"value_target": 5,
 		"unlocked": false
 	},
 	{
 		"title": "Shiny",
 		"description": "What can i use it for?",
-		"unlock_type": "stat_target",
-		"stat_name": "coin",
-		"stat_target": 1,
+		"unlock_type": "collectable_target",
+		"target_name": "coin",
+		"value_target": 1,
 		"unlocked": false
 	},
 	{
 		"title": "Start a business",
 		"description": "5 coins is a lot",
-		"unlock_type": "stat_target",
-		"stat_name": "coin",
-		"stat_target": 5,
-		"unlocked": false
-	},
-	{
-		"title": "Place holder",
-		"description": "Place holder description",
-		"unlock_type": "stat_target",
-		"stat_name": "place_holder",
-		"stat_target": 1,
-		"unlocked": false
-	},
-	{
-		"title": "Place holder",
-		"description": "Place holder description",
-		"unlock_type": "stat_target",
-		"stat_name": "place_holder",
-		"stat_target": 2,
-		"unlocked": false
-	},
-	{
-		"title": "Place holder",
-		"description": "Place holder description",
-		"unlock_type": "stat_target",
-		"stat_name": "place_holder",
-		"stat_target": 3,
+		"unlock_type": "collectable_target",
+		"target_name": "coin",
+		"value_target": 5,
 		"unlocked": false
 	}
 ]
