@@ -111,19 +111,20 @@ func check_letal_tiles() -> void:
 		var collision := get_slide_collision(i)
 
 		if collision.get_collider() is TileMapLayer:
-			var tilemap_layer := collision.get_collider() as TileMapLayer
-			var physics_layer_id := collision.get_collider_shape_index()
+			var collider_rid := collision.get_collider_rid()
+			var collider_layer := PhysicsServer2D.body_get_collision_layer(collider_rid)
 
-			# Get the TileSet physics layer collision mask
-			var tileset := tilemap_layer.tile_set
-			var layer: int = (
-				tileset.get_physics_layer_collision_layer(physics_layer_id)
-				if tileset.get_physics_layers_count() > physics_layer_id
-				else -1
-			)
-
-			if layer == LETHAL_LAYER:
+			# Lethal layer is 8 (00001000)
+			# Player could collide with a lethal object hat is also in another layer
+			# If that is the case the coller_layer would have multiple bits set as 1
+			# eg: 00001001 -> Layer 1 and 8 are on, collider_layer variable is 9
+			# The "&" operator (bitwise and) will return 1 for each bit that is 1 in both numbers
+			# The LETHAL_LAYER has only 1 bit on
+			# when collider_layer does not include layer 8, the bitwise operation returns 0
+			# If the result is not 0, then collision is on object that has lethal layer enabled
+			if collider_layer & LETHAL_LAYER != 0:
 				die()
+				return
 
 func get_tile_under_player(tilemap: TileMapLayer) -> TileData:
 	var cell := tilemap.local_to_map(tilemap.to_local(global_position))

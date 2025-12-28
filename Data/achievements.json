@@ -2,7 +2,7 @@
 	{
 		"title": "What happened?",
 		"description": "There is a first time for everything",
-		"unlock_type": "value_target",
+		"unlock_type": "stat_target",
 		"target_name": "death",
 		"value_target": 1,
 		"unlocked": false
@@ -10,7 +10,7 @@
 	{
 		"title": "Again?",
 		"description": "There is a fifth time for everything",
-		"unlock_type": "value_target",
+		"unlock_type": "stat_target",
 		"target_name": "death",
 		"value_target": 5,
 		"unlocked": false
@@ -29,6 +29,30 @@
 		"unlock_type": "collectable_target",
 		"target_name": "coin",
 		"value_target": 5,
+		"unlocked": false
+	},
+	{
+		"title": "Off the ground",
+		"description": "Get off the ground",
+		"unlock_type": "stat_target",
+		"target_name": "jump",
+		"value_target": 1,
+		"unlocked": false
+	},
+	{
+		"title": "Going higher",
+		"description": "Jump 10 times",
+		"unlock_type": "stat_target",
+		"target_name": "jump",
+		"value_target": 10,
+		"unlocked": false
+	},
+	{
+		"title": "Jumping jumping",
+		"description": "Jump 20 times",
+		"unlock_type": "stat_target",
+		"target_name": "jump",
+		"value_target": 20,
 		"unlocked": false
 	}
 ]

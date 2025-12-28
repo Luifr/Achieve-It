@@ -5,6 +5,7 @@ extends Control
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	SaveDataManager.loaded_data = null
+	RenderingServer.set_default_clear_color(Color.BLACK)
 	choose_your_save.hide()
 
 func _on_play_button_pressed() -> void:

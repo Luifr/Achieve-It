@@ -43,7 +43,7 @@ static func is_valid_achievement_data(data: Dictionary) -> bool:
 
 static func get_unlock_type_enum_from_string(unlock_type_string: String) -> UnlockType:
 	match unlock_type_string:
-		"value_target":
+		"stat_target":
 			return UnlockType.STAT_TARGET
 		"collectable_target":
 			return UnlockType.COLLECTABLE_TARGET

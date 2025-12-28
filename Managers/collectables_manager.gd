@@ -33,7 +33,7 @@ func set_collectables_from_dictionary(data: Array) -> void:
 		assert(entry is Dictionary)
 		var dictionary_entry: Dictionary = entry
 		var collectable := Collectable.from_dictionary(dictionary_entry)
-		printt(str(dictionary_entry))
+
 		# TODO: id cant change, but what if type or something else changes? then data from disk has to be updated
 		# event better, only save id and is_unlocked on disk, everything else should come from the game
 		collectables.set(entry.get("id", ""), collectable)
@@ -47,3 +47,8 @@ func collectables_to_dictionary() -> Array[Dictionary]:
 		dictionary_array.append(collectable.to_dictionary())
 	
 	return dictionary_array
+
+func get_amount_of_collected_collectables_by_type(type: String) -> int:
+	return collectables_per_type[type].collectables.filter(
+		func (collectable: Collectable) -> bool: return collectable.is_collected
+	).size()
