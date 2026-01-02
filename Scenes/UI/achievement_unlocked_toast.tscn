@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3 uid="uid://c2letqrlfob0r"]
+
+[ext_resource type="Script" uid="uid://dtbo4yagxu6ax" path="res://Scripts/achievement_unlocked_toast.gd" id="1_lixo3"]
+[ext_resource type="Texture2D" uid="uid://b8be7fyqxs7ev" path="res://Assets/Art/locked-achievement.png" id="2_8i25v"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lixo3"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="AchievementUnlockedToast" type="PanelContainer" node_paths=PackedStringArray("icon", "achievement_title")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lixo3")
+script = ExtResource("1_lixo3")
+icon = NodePath("AchievementContainer/Icon")
+achievement_title = NodePath("AchievementContainer/VBoxContainer/AchievementTitle")
+
+[node name="AchievementContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="Icon" type="TextureRect" parent="AchievementContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("2_8i25v")
+stretch_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AchievementContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="NotificationTitle" type="Label" parent="AchievementContainer/VBoxContainer"]
+layout_mode = 2
+text = "Achievement Unlocked"
+
+[node name="AchievementTitle" type="Label" parent="AchievementContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Title"

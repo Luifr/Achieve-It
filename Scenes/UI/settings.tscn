@@ -1,9 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://8l31r3a0bup0"]
+[gd_scene load_steps=2 format=3 uid="uid://8l31r3a0bup0"]
 
-[ext_resource type="Script" uid="uid://d0wqn517xna3h" path="res://Scripts/settings.gd" id="1_4geyq"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i44u3"]
-bg_color = Color(0.14901961, 0.047058824, 0.19215687, 0.6)
+[ext_resource type="Script" uid="uid://d0wqn517xna3h" path="res://Scripts/settings.gd" id="1_owiy1"]
 
 [node name="Settings" type="Control" node_paths=PackedStringArray("resolution_option_button", "screen_mode_option_button", "volume_h_slider", "mute_check_box")]
 layout_mode = 3
@@ -12,7 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_4geyq")
+script = ExtResource("1_owiy1")
 resolution_option_button = NodePath("Panel/MarginContainer/VBoxContainer/TabContainer/Video/ResolutionHBoxContainer/ResolutionOptionButton")
 screen_mode_option_button = NodePath("Panel/MarginContainer/VBoxContainer/TabContainer/Video/ScreenModeHBoxContainer/ScreenModeOptionButton")
 volume_h_slider = NodePath("Panel/MarginContainer/VBoxContainer/TabContainer/Audio/HBoxContainer/VolumeHSlider")
@@ -25,7 +22,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_i44u3")
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel"]
 layout_mode = 1

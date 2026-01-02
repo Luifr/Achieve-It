@@ -1,30 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://co5e4q0jguxgk"]
+[gd_scene load_steps=6 format=3 uid="uid://co5e4q0jguxgk"]
 
-[ext_resource type="Texture2D" uid="uid://cirx3mnf751k1" path="res://Assets/Art/octopus-0001.png" id="1_28flt"]
-[ext_resource type="Script" uid="uid://cjdn2oiltkf6u" path="res://Scripts/main_menu.gd" id="1_48xlc"]
-[ext_resource type="PackedScene" uid="uid://dcprp8tauavip" path="res://Scenes/choose_your_save.tscn" id="3_1ehe0"]
+[ext_resource type="Script" uid="uid://cjdn2oiltkf6u" path="res://Scripts/main_menu.gd" id="1_u7lva"]
+[ext_resource type="Texture2D" uid="uid://cirx3mnf751k1" path="res://Assets/Art/octopus-0001.png" id="2_mrfpk"]
+[ext_resource type="PackedScene" uid="uid://dcprp8tauavip" path="res://Scenes/UI/choose_your_save.tscn" id="3_4pqbp"]
+[ext_resource type="PackedScene" uid="uid://8l31r3a0bup0" path="res://Scenes/UI/settings.tscn" id="3_mrfpk"]
+[ext_resource type="PackedScene" uid="uid://datrnd7d2hcd8" path="res://Scenes/UI/quit_game_alert.tscn" id="4_gih0s"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7vrkn"]
-content_margin_left = 0.0
-content_margin_top = 0.0
-content_margin_right = 0.0
-content_margin_bottom = 0.0
-bg_color = Color(0.25184393, 0.0990595, 0.31655353, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
-
-[node name="Menu Root" type="Control" node_paths=PackedStringArray("choose_your_save")]
+[node name="Menu Root" type="Control" node_paths=PackedStringArray("choose_your_save", "quit_game_alert", "settings")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_48xlc")
+script = ExtResource("1_u7lva")
 choose_your_save = NodePath("Choose your save")
+quit_game_alert = NodePath("Quit Game Alert")
+settings = NodePath("Settings")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -33,7 +25,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_7vrkn")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
@@ -60,7 +51,7 @@ offset_right = 115.00001
 offset_bottom = -136.99998
 grow_vertical = 0
 scale = Vector2(2.835, 2.835)
-texture = ExtResource("1_28flt")
+texture = ExtResource("2_mrfpk")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -101,9 +92,22 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Quit"
 
-[node name="Choose your save" parent="." instance=ExtResource("3_1ehe0")]
+[node name="Settings" parent="." instance=ExtResource("3_mrfpk")]
 visible = false
 layout_mode = 1
+
+[node name="Choose your save" parent="." instance=ExtResource("3_4pqbp")]
+visible = false
+layout_mode = 1
+
+[node name="Quit Game Alert" parent="." instance=ExtResource("4_gih0s")]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3
+anchor_top = 0.3
+anchor_right = 0.7
+anchor_bottom = 0.7
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Play Button" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Settings Button" to="." method="_on_settings_button_pressed"]

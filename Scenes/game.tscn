@@ -1,25 +1,32 @@
-[gd_scene load_steps=3 format=3 uid="uid://drlpxnsx3p7x0"]
+[gd_scene load_steps=5 format=3 uid="uid://drlpxnsx3p7x0"]
 
-[ext_resource type="PackedScene" uid="uid://duvttncvgjmvc" path="res://Scenes/achievements_area.tscn" id="1_qxrlw"]
-[ext_resource type="PackedScene" uid="uid://cgob5xhjyvg0e" path="res://Scenes/level1.tscn" id="2_wrm1d"]
+[ext_resource type="Script" uid="uid://dfiqjdggn0v3e" path="res://Scripts/game.gd" id="1_3dryh"]
+[ext_resource type="PackedScene" uid="uid://duvttncvgjmvc" path="res://Scenes/UI/achievements_area.tscn" id="1_qxrlw"]
+[ext_resource type="PackedScene" uid="uid://krwqpvpiym6d" path="res://Scenes/UI/pause_menu.tscn" id="2_3dryh"]
+[ext_resource type="PackedScene" uid="uid://cgob5xhjyvg0e" path="res://Scenes/map.tscn" id="2_wrm1d"]
 
-[node name="game" type="Node"]
+[node name="game" type="Node" node_paths=PackedStringArray("pause_menu", "achievement_unlocked_v_box")]
+script = ExtResource("1_3dryh")
+pause_menu = NodePath("CanvasLayer/Pause Menu")
+achievement_unlocked_v_box = NodePath("CanvasLayer/AchievementUnlockedVBox")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Control" type="Control" parent="CanvasLayer"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Achievements Area" parent="CanvasLayer/Control" groups=["ui_right_panel"] instance=ExtResource("1_qxrlw")]
-layout_mode = 1
+[node name="Achievements Area" parent="CanvasLayer" groups=["ui_right_panel"] instance=ExtResource("1_qxrlw")]
 anchors_preset = -1
 anchor_left = 0.7
 grow_horizontal = 0
+
+[node name="AchievementUnlockedVBox" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.75000006
+anchor_right = 0.3
+anchor_bottom = 0.90000004
+offset_top = -6.1035156e-05
+
+[node name="Pause Menu" parent="CanvasLayer" instance=ExtResource("2_3dryh")]
+visible = false
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 anchors_preset = -1

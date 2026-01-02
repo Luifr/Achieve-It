@@ -1,15 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://dcprp8tauavip"]
+[gd_scene load_steps=3 format=3 uid="uid://dcprp8tauavip"]
 
 [ext_resource type="Script" uid="uid://cuuv3h8tgf676" path="res://Scripts/choose_your_save.gd" id="1_iqt4c"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1s8ws"]
-bg_color = Color(0.14901961, 0.047058824, 0.19215687, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iqt4c"]
-draw_center = false
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ffpk4"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_skytf"]
 content_margin_bottom = 50.0
@@ -25,7 +16,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_1s8ws")
 script = ExtResource("1_iqt4c")
 save_slots_v_box = NodePath("PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer")
 create_save_profile_modal = NodePath("CreateSaveProfileModal")
@@ -39,7 +29,6 @@ anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.2
 grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_iqt4c")
 
 [node name="Title" type="Label" parent="TitleContainer"]
 layout_mode = 2
@@ -55,7 +44,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_ffpk4")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2

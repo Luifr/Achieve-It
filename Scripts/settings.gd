@@ -6,6 +6,7 @@ extends Control
 @export var mute_check_box: CheckBox
 
 func _ready() -> void:
+	hide()
 	set_default_resolution()
 	set_default_window_mode()
 	set_default_volume()
@@ -14,7 +15,6 @@ func _ready() -> void:
 func set_default_resolution() -> void:
 	var current_size := DisplayServer.window_get_size()
 	var current_size_text: String = "%dx%d" % [current_size.x, current_size.y]
-	print(current_size_text)
 
 	for i: int in range(resolution_option_button.get_item_count()):
 		var item_text := resolution_option_button.get_item_text(i)
@@ -62,8 +62,7 @@ func _on_screen_mode_option_button_item_selected(index: int) -> void:
 	DisplayServer.window_set_mode(window_mode)
 
 func _on_back_button_pressed() -> void:
-	var MAIN_MENU := load("uid://co5e4q0jguxgk")
-	get_tree().change_scene_to_packed(MAIN_MENU)
+	hide()
 
 func _on_volume_h_slider_value_changed(value: float) -> void:
 	if value == 0:
