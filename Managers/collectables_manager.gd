@@ -49,6 +49,9 @@ func collectables_to_dictionary() -> Array[Dictionary]:
 	return dictionary_array
 
 func get_amount_of_collected_collectables_by_type(type: String) -> int:
+	if !collectables_per_type.has(type):
+		return 0
+
 	return collectables_per_type[type].collectables.filter(
 		func (collectable: Collectable) -> bool: return collectable.is_collected
 	).size()

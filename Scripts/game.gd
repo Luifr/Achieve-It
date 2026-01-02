@@ -18,5 +18,5 @@ func create_achievement_unlocked_toast(achievement: Achievement) -> void:
 	var toast := ACHIEVEMENT_UNLOCKED_TOAST.instantiate()
 	toast.achievement = achievement
 	achievement_unlocked_v_box.add_child(toast)
-	await get_tree().create_timer(10).timeout
+	await get_tree().create_timer(4).timeout
 	toast.queue_free()

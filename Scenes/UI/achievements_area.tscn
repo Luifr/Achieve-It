@@ -27,7 +27,7 @@ corner_detail = 5
 content_margin_top = 40.0
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
-[node name="Achievements Area" type="Control" node_paths=PackedStringArray("achievements_v_box", "achievements_completed_info", "current_profile_label")]
+[node name="Achievements Area" type="Control" node_paths=PackedStringArray("achievements_v_box", "achievements_completed_info", "current_profile_label", "coins_collected_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -38,6 +38,7 @@ script = ExtResource("1_b4or2")
 achievements_v_box = NodePath("PanelContainerBackgroud/PanelContainer/MainVBoxContainer/ScrollContainer/AchievementsVBox")
 achievements_completed_info = NodePath("PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer/AchievementsCompletedInfo")
 current_profile_label = NodePath("PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3/CurrentProfileLabel")
+coins_collected_label = NodePath("PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/CoinsCollectedHBoxContainer/CoinsCollectedLabel")
 
 [node name="PanelContainerBackgroud" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -101,20 +102,20 @@ text = "0/25"
 visible_characters = 15
 visible_ratio = 3.75
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer"]
+[node name="CoinsCollectedHBoxContainer" type="HBoxContainer" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer"]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer2"]
+[node name="Label2" type="Label" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/CoinsCollectedHBoxContainer"]
 layout_mode = 2
-text = "Another stat:"
+text = "Coins collected:"
 
-[node name="Control" type="Control" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer2"]
+[node name="Control" type="Control" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/CoinsCollectedHBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer2"]
+[node name="CoinsCollectedLabel" type="Label" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/CoinsCollectedHBoxContainer"]
 layout_mode = 2
-text = "Yes"
+text = "0"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer"]
 layout_mode = 2

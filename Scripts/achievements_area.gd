@@ -6,6 +6,7 @@ const ACHIEVEMENT_CONTAINER = preload("uid://cmcd1prtawpik")
 
 @export var achievements_completed_info: Label
 @export var current_profile_label: Label
+@export var coins_collected_label: Label
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -17,8 +18,16 @@ func _ready() -> void:
 		achievement_container.achievement = achievement
 		achievements_v_box.add_child(achievement_container)
 
+	coins_collected_label.text = str(CollectablesManager.get_amount_of_collected_collectables_by_type("coin"))
+
 	update_achievements_stats()
 	AchievementManager.achievement_unlocked.connect(update_achievements_stats.unbind(1))
+	CollectablesManager.collectable_collected.connect(update_coins_collected)
+
+func update_coins_collected(_collectable_id: String, collectable_type: String) -> void:
+	if collectable_type != "coin":
+		return
+	coins_collected_label.text = str(CollectablesManager.get_amount_of_collected_collectables_by_type("coin"))
 
 func update_achievements_stats() -> void:
 	var completed := AchievementManager.all_achievements.filter(AchievementManager.is_achievement_unlocked).size()
