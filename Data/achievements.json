@@ -54,5 +54,36 @@
 		"target_name": "jump",
 		"value_target": 20,
 		"unlocked": false
+	},
+	{
+		"title": "Let's get warm",
+		"description": "Walk 50 meters",
+		"unlock_type": "stat_target",
+		"target_name": "distance_walked",
+		"value_target": 50,
+		"unlocked": false
+	},
+	{
+		"title": "I'm on fire",
+		"description": "Walk 150 meters",
+		"unlock_type": "stat_target",
+		"target_name": "distance_walked",
+		"value_target": 150,
+		"unlocked": false
+	},
+	{
+		"title": "I'm on fire 2",
+		"description": "Walk 200 meters",
+		"unlock_type": "stat_target",
+		"target_name": "distance_walked",
+		"value_target": 200,
+		"unlocked": false
+	},
+	{
+		"title": "Achievement hunter",
+		"description": "Unlock 10 achievements",
+		"unlock_type": "achievement_target",
+		"value_target": 10,
+		"unlocked": false
 	}
 ]

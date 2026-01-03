@@ -30,7 +30,7 @@ func update_coins_collected(_collectable_id: String, collectable_type: String) -
 	coins_collected_label.text = str(CollectablesManager.get_amount_of_collected_collectables_by_type("coin"))
 
 func update_achievements_stats() -> void:
-	var completed := AchievementManager.all_achievements.filter(AchievementManager.is_achievement_unlocked).size()
+	var completed := AchievementManager.get_amount_of_unlocked_achievements()
 	var total := AchievementManager.all_achievements.size()
 	var percent := int(float(completed) / total * 100)
 	achievements_completed_info.text = str(completed) + "/" + str(total) + "  " + str(percent) + "%"

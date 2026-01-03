@@ -19,24 +19,16 @@ func _ready() -> void:
 
 	StatsManager.stat_changed.connect(update_stat_target_progres)
 	CollectablesManager.collectable_collected.connect(update_collectable_target_progres)
+	AchievementManager.achievement_unlocked.connect(update_achievement_target_progres)
 	
 	title.text = achievement.title
 	description.text = achievement.description
 	
 	icon.texture = CHECK_MARK if achievement.unlocked else LOCKED_ACHIEVEMENT
 
-	if achievement.unlock_type == Achievement.UnlockType.STAT_TARGET:
+	if achievement.value_target:
 		progress_bar.max_value = achievement.value_target
-		progress_bar.value = StatsManager.stats[achievement.target_name]
-	
-	if achievement.unlock_type == Achievement.UnlockType.COLLECTABLE_TARGET:
-		progress_bar.max_value = achievement.value_target
-		if CollectablesManager.collectables_per_type.has(achievement.target_name):
-			progress_bar.value = CollectablesManager.collectables_per_type[achievement.target_name].collectables.filter(
-				func(collectable: Collectable) -> bool: return collectable.is_collected
-			).size()
-		else:
-			progress_bar.value = 0
+		progress_bar.value = AchievementManager.achievement_handlers[achievement.unlock_type].get_progress_value(achievement)
 
 func update_stat_target_progres(target_name: String, new_value: Variant) -> void:
 	if target_name != achievement.target_name:
@@ -45,7 +37,6 @@ func update_stat_target_progres(target_name: String, new_value: Variant) -> void
 	icon.texture = CHECK_MARK if achievement.unlocked else LOCKED_ACHIEVEMENT
 	
 	if achievement.unlock_type == Achievement.UnlockType.STAT_TARGET:
-		progress_bar.max_value = achievement.value_target
 		progress_bar.value = new_value
 
 func update_collectable_target_progres(_collectable_id: String, collectable_type: String) -> void:
@@ -61,3 +52,7 @@ func update_collectable_target_progres(_collectable_id: String, collectable_type
 		).size()
 	else:
 		progress_bar.value = 0
+
+func update_achievement_target_progres(_achievement: Achievement) -> void:
+	icon.texture = CHECK_MARK if achievement.unlocked else LOCKED_ACHIEVEMENT
+	progress_bar.value = AchievementManager.achievement_handlers[Achievement.UnlockType.ACHIEVEMENT_TARGET].get_progress_value(achievement)

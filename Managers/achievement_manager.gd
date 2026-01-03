@@ -5,24 +5,48 @@ var all_achievements: Array[Achievement] = []
 # TODO: create a Dictionary for triggered achievements
 var stat_achievements_hash: Dictionary[String, AchievementsArray]
 var collectable_achievements_hash: Dictionary[String, AchievementsArray]
+var achievement_achievements_array: AchievementsArray
 
 const ACHIEVEMENTS_FILE_PATH = "res://Data/achievements.json"
 
+var achievement_handlers: Dictionary[Achievement.UnlockType, AchievementHandler] = {
+	Achievement.UnlockType.STAT_TARGET: StatTargetHandler.new(),
+	Achievement.UnlockType.COLLECTABLE_TARGET: CollectableTargetHandler.new(),
+	Achievement.UnlockType.ACHIEVEMENT_TARGET: AchievementTargetHandler.new()
+} 
+
 signal achievement_unlocked(achievement: Achievement)
 
-# Called when the node enters the scene tree for the first time.
-func ready() -> void:
-	if !StatsManager.stat_changed.is_connected(try_unlock_stat_target_achievements):
-		StatsManager.stat_changed.connect(try_unlock_stat_target_achievements)
+func stat_try_unlock_achievements(target_name: String, new_value: Variant) -> void:
+	achievement_handlers[Achievement.UnlockType.STAT_TARGET].try_unlock_achievements({
+		"target_name": target_name,
+		"new_value": new_value
+	})
 
-	if !CollectablesManager.collectable_collected.is_connected(try_unlock_collectable_target_achievements):
-		CollectablesManager.collectable_collected.connect(try_unlock_collectable_target_achievements)
+func collectable_try_unlock_achievements(_collectable_id: String, collectable_type: String) -> void:
+	achievement_handlers[Achievement.UnlockType.COLLECTABLE_TARGET].try_unlock_achievements({
+		"collectable_type": collectable_type
+	})
+
+func achievement_try_unlock_achievements(_achievement: Achievement) -> void:
+	achievement_handlers[Achievement.UnlockType.ACHIEVEMENT_TARGET].try_unlock_achievements({})
+
+func ready() -> void:
+	if !StatsManager.stat_changed.is_connected(stat_try_unlock_achievements):
+		StatsManager.stat_changed.connect(stat_try_unlock_achievements)
+
+	if !CollectablesManager.collectable_collected.is_connected(collectable_try_unlock_achievements):
+		CollectablesManager.collectable_collected.connect(collectable_try_unlock_achievements)
+
+	if !achievement_unlocked.is_connected(achievement_try_unlock_achievements):
+		achievement_unlocked.connect(achievement_try_unlock_achievements)
 
 	prepare_achievements()
 
 func prepare_achievements() -> void:
 	all_achievements = []
 	stat_achievements_hash = {}
+	achievement_achievements_array = AchievementsArray.new()
 
 	var json_data := load_achievements_from_json()
 	process_achievements_json(json_data)
@@ -49,82 +73,41 @@ func process_achievements_json(json_data: Array) -> void:
 			push_error("Invalid data at index " + str(index) + ", while parsing achievements JSON")
 			continue
 
+		if entry_variant.has("disabled") and entry_variant.get("disabled") == true:
+			continue
+
 		var entry := Achievement.new().from_dictionary(entry_variant)
 
 		all_achievements.append(entry)
 
+		if achievement_handlers[entry.unlock_type].check_can_unlock_achievement(entry):
+			entry.unlocked = true
+
 		if entry.unlock_type == Achievement.UnlockType.STAT_TARGET:
-			if check_stat_target_achievement(entry):
-				entry.unlocked = true
 			
 			var target_name: String = entry.target_name
 			if !stat_achievements_hash.has(target_name):
 				stat_achievements_hash.set(target_name, AchievementsArray.new())
 			stat_achievements_hash[target_name].achievements.append(entry)
 		elif entry.unlock_type == Achievement.UnlockType.COLLECTABLE_TARGET:
-			if check_collectable_target_achievement(entry):
-				entry.unlocked = true
-
 			var collectable_type: String = entry.target_name
 			if !collectable_achievements_hash.has(collectable_type):
 				collectable_achievements_hash.set(collectable_type, AchievementsArray.new())
 			collectable_achievements_hash[collectable_type].achievements.append(entry)
+		elif entry.unlock_type == Achievement.UnlockType.ACHIEVEMENT_TARGET:
+			achievement_achievements_array.achievements.append(entry)
 
 	for key: String in stat_achievements_hash.keys():
 		stat_achievements_hash[key].achievements.sort_custom(
 			AchievementsArray.sort_target_ascending
 		)
+	
+	achievement_achievements_array.achievements.sort_custom(
+		AchievementsArray.sort_target_ascending
+	)
 
 func is_achievement_unlocked(achievement: Achievement) -> bool:
 	return achievement.unlocked
 
-func check_stat_target_achievement(achievement: Achievement) -> bool:
-	if achievement.unlocked:
-		return achievement.unlocked
-	
-	if achievement.unlock_type != Achievement.UnlockType.STAT_TARGET:
-		return false
-	
-	return StatsManager.stats[achievement.target_name] >= achievement.value_target
-
-func check_collectable_target_achievement(achievement: Achievement) -> bool:
-	if achievement.unlocked:
-		return achievement.unlocked
-	
-	if achievement.unlock_type != Achievement.UnlockType.COLLECTABLE_TARGET:
-		return false
-
-	if !CollectablesManager.collectables_per_type.has(achievement.target_name):
-		return false
-	
-	return CollectablesManager.collectables_per_type[achievement.target_name].collectables.filter(
-		func(collectable: Collectable) -> bool: return collectable.is_collected
-	).size() >= achievement.value_target
-
-func try_unlock_stat_target_achievements(target_name: String, new_value: Variant) -> void:
-	if !stat_achievements_hash.has(target_name):
-		return
-	
-	for achievement: Achievement in stat_achievements_hash[target_name].achievements:
-		if achievement.unlocked:
-			continue
-		
-		var can_unlock := check_stat_target_achievement(achievement)
-		if can_unlock:
-			achievement.unlocked = true
-			achievement_unlocked.emit(achievement)
-		elif achievement.value_target > new_value:
-			return
-
-func try_unlock_collectable_target_achievements(_collectable_id: String, collectable_type: String) -> void:
-	if !collectable_achievements_hash.has(collectable_type):
-		return
-	
-	for achievement: Achievement in collectable_achievements_hash[collectable_type].achievements:
-		if achievement.unlocked:
-			continue
-		
-		var can_unlock := check_collectable_target_achievement(achievement)
-		if can_unlock:
-			achievement.unlocked = true
-			achievement_unlocked.emit(achievement)
+func get_amount_of_unlocked_achievements() -> int:
+	return all_achievements.filter(is_achievement_unlocked).size()

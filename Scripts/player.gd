@@ -28,6 +28,11 @@ var overlapping_areas: Array[CollisionShape2D] = []
 var camera: GameCamera2D
 
 var initial_position: Vector2
+var last_position: Vector2
+
+var distance_walked_in_pixels_buffer: float = 0.0
+const PIXEL_PER_METER_RATIO: float = 50
+const DISTANCE_WALKED_BUFFER_MAX_SIZE: float = 200
 
 func reparent_camera() -> void:
 	camera = get_tree().get_first_node_in_group("camera")
@@ -42,6 +47,7 @@ func reparent_camera() -> void:
 func _ready() -> void:
 	call_deferred("reparent_camera")
 	initial_position = position
+	last_position = position
 	
 	if SaveDataManager.loaded_data.player_position != Vector2.INF:
 		position = SaveDataManager.loaded_data.player_position
@@ -96,6 +102,12 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	check_letal_tiles()
+	
+	distance_walked_in_pixels_buffer += global_position.distance_to(last_position)
+	last_position = global_position
+	if distance_walked_in_pixels_buffer >= DISTANCE_WALKED_BUFFER_MAX_SIZE:
+		StatsManager.increment_stat_by(Stats.StatType.DISTANCE_WALKED, distance_walked_in_pixels_buffer / PIXEL_PER_METER_RATIO)
+		distance_walked_in_pixels_buffer = 0
 
 func on_area_entered(area_collision_shape_2d: CollisionShape2D) -> void:
 	overlapping_areas.append(area_collision_shape_2d)
@@ -134,3 +146,4 @@ func die() -> void:
 	StatsManager.increment_stat(Stats.StatType.DEATH)
 	audio_stream_player_2d.play()
 	position = initial_position
+	last_position = position

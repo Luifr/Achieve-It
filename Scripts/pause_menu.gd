@@ -10,6 +10,7 @@ func _ready() -> void:
 
 func _on_resume_button_pressed() -> void:
 	hide()
+	get_tree().paused = false
 
 func _on_settings_button_pressed() -> void:
 	settings.show()
