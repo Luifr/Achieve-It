@@ -17,7 +17,7 @@ func setup_save_slots() -> void:
 	var saves: Array[Dictionary] = SaveDataManager.load_all_saves()
 	for save in saves:
 		var save_slot: SaveSlot = SAVE_SLOT.instantiate()
-		save_slot.loaded_data = SaveData.new(save.get("index", ""), save.get("profile_name", ""))
+		save_slot.loaded_data = SaveData.new(save, save.get("file_index"))
 		save_slots_v_box.add_child(save_slot)
 		save_slots_v_box.move_child(create_new_save_button, -1)
 

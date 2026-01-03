@@ -24,29 +24,29 @@ func add_collectable(collectable_id: String, collectable_type: String) -> void:
 	all_collectables.append(collectable)
 	(collectables_per_type.get_or_add(collectable.type, CollectablesArray.new()) as CollectablesArray).collectables.append(collectable)
 
-func set_collectables_from_dictionary(data: Array) -> void:
+func set_collectables() -> void:
 	collectables = {}
 	all_collectables = []
 	collectables_per_type = {}
-	
-	for entry: Variant in data:
-		assert(entry is Dictionary)
-		var dictionary_entry: Dictionary = entry
-		var collectable := Collectable.from_dictionary(dictionary_entry)
 
-		# TODO: id cant change, but what if type or something else changes? then data from disk has to be updated
-		# event better, only save id and is_unlocked on disk, everything else should come from the game
-		collectables.set(entry.get("id", ""), collectable)
+	for node: Node in get_tree().get_nodes_in_group("collectable"):
+		var collectable := Collectable.new(
+			node.collectable_id,
+			node.collectable_type,
+			SaveDataManager.loaded_data.collectables.get("collectable_id", false)
+		)
+
+		collectables.set(node.collectable_id, collectable)
 		all_collectables.append(collectable)
 		(collectables_per_type.get_or_add(collectable.type, CollectablesArray.new()) as CollectablesArray).collectables.append(collectable)
 
-func collectables_to_dictionary() -> Array[Dictionary]:
-	var dictionary_array: Array[Dictionary] = []
-	
-	for collectable: Collectable in collectables.values():
-		dictionary_array.append(collectable.to_dictionary())
-	
-	return dictionary_array
+func to_saved_collectables() -> Dictionary[String, bool]:
+	return all_collectables.reduce(
+			func(acc: Dictionary[String, bool], collectable: Collectable) -> Dictionary[String, bool]:
+				acc[collectable.id] = collectable.is_collected
+				return acc,
+		{} as Dictionary[String, bool]
+	)
 
 func get_amount_of_collected_collectables_by_type(type: String) -> int:
 	if !collectables_per_type.has(type):

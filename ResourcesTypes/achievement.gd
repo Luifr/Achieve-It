@@ -9,6 +9,7 @@ enum UnlockType {
 	TRIGGERED
 }
 
+@export var id: String
 @export var title: String
 @export var description: String
 @export var unlock_type: UnlockType
@@ -20,6 +21,7 @@ enum UnlockType {
 func from_dictionary(data: Dictionary) -> Achievement:
 	assert(is_valid_achievement_data(data), "Invalid data for achievement" + str(data))
 
+	id = data.get("id")
 	title = data.get("title")
 	description = data.get("description")
 	unlock_type = get_unlock_type_enum_from_string(data.get("unlock_type"))
@@ -31,6 +33,7 @@ func from_dictionary(data: Dictionary) -> Achievement:
 
 static func is_valid_achievement_data(data: Dictionary) -> bool:
 	if (
+		!data.has("id") or
 		!data.has("title") or
 		!data.has("description") or
 		!data.has("value_target") or
@@ -56,7 +59,6 @@ static func get_unlock_type_enum_from_string(unlock_type_string: String) -> Unlo
 			return UnlockType.COLLECTABLE_TARGET
 		"triggered":
 			return UnlockType.TRIGGERED
-		# TODO: handle this type
 		"achievement_target":
 			return UnlockType.ACHIEVEMENT_TARGET
 		_:

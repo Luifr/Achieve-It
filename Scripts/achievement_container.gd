@@ -17,9 +17,13 @@ func _ready() -> void:
 		printerr("Achievement container missing achievement reference")
 		return
 
-	StatsManager.stat_changed.connect(update_stat_target_progres)
-	CollectablesManager.collectable_collected.connect(update_collectable_target_progres)
-	AchievementManager.achievement_unlocked.connect(update_achievement_target_progres)
+	match achievement.unlock_type:
+		Achievement.UnlockType.STAT_TARGET:
+			StatsManager.stat_changed.connect(update_stat_target_progres)
+		Achievement.UnlockType.COLLECTABLE_TARGET:
+			CollectablesManager.collectable_collected.connect(update_collectable_target_progres)
+		Achievement.UnlockType.ACHIEVEMENT_TARGET:
+			AchievementManager.achievement_unlocked.connect(update_achievement_target_progres)
 	
 	title.text = achievement.title
 	description.text = achievement.description
@@ -30,7 +34,7 @@ func _ready() -> void:
 		progress_bar.max_value = achievement.value_target
 		progress_bar.value = AchievementManager.achievement_handlers[achievement.unlock_type].get_progress_value(achievement)
 
-func update_stat_target_progres(target_name: String, new_value: Variant) -> void:
+func update_stat_target_progres(target_name: String, new_value: Variant) -> void:	
 	if target_name != achievement.target_name:
 		return
 		
@@ -53,6 +57,6 @@ func update_collectable_target_progres(_collectable_id: String, collectable_type
 	else:
 		progress_bar.value = 0
 
-func update_achievement_target_progres(_achievement: Achievement) -> void:
+func update_achievement_target_progres(_achievement: Achievement) -> void:	
 	icon.texture = CHECK_MARK if achievement.unlocked else LOCKED_ACHIEVEMENT
 	progress_bar.value = AchievementManager.achievement_handlers[Achievement.UnlockType.ACHIEVEMENT_TARGET].get_progress_value(achievement)

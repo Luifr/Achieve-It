@@ -14,6 +14,7 @@ func _ready() -> void:
 
 func reset_local_save_data() -> void:
 	CollectablesManager.reset_data()
+	AchievementManager.reset_data()
 	StatsManager.stats = Stats.new()
 	
 func get_str_index_from_file_name(file_name: String) -> String:
@@ -36,7 +37,9 @@ func create_new_save(profile_name: String) -> void:
 	
 	var file := FileAccess.open(SAVE_DATA_PATH.format([save_index_string]), FileAccess.WRITE)
 
-	loaded_data = SaveData.new(save_index_string, profile_name)
+	loaded_data = SaveData.new({
+		"profile_name": profile_name,
+	}, save_index_string)
 
 	file.store_string(JSON.stringify(loaded_data.to_dictionary()))
 
@@ -48,11 +51,20 @@ func load_all_saves() -> Array[Dictionary]:
 			var save_data_path: String = SAVES_DIR + file_name
 			var file := FileAccess.open(save_data_path, FileAccess.READ)
 			var file_text := file.get_as_text()
+
+			if file_text.length() == 0:
+				printerr("Empty save file dected, probably corrupt or error during save creation at path %s" % save_data_path)
+				file.close()
+				var result := DirAccess.remove_absolute(save_data_path)
+				if result != OK:
+					printerr("Failed to remove save file at path %s" % save_data_path)
+				continue
+			
 			var parsed_text: Variant = JSON.parse_string(file_text)
 			# TODO: if file creation failed, we could have a corrupt file, handle it
 			assert(parsed_text != null, "Save data with filename %s is invalid" % file_name)
 			var data: Dictionary = parsed_text
-			data.set("index", SaveDataManager.get_str_index_from_file_name(file_name))
+			data.set("file_index", SaveDataManager.get_str_index_from_file_name(file_name))
 			saves.append(data)
 	return saves
 
@@ -97,15 +109,10 @@ func load_data_at_index(index: String, reload_current_scene := true) -> void:
 	
 	var data: Dictionary = JSON.parse_string(file_text)
 
-	var player_position: Vector2 = Vector2.INF
-	if data.has("player_position_x") and data.has("player_position_y"):
-		player_position = Vector2(data.get("player_position_x"), data.get("player_position_y"))
-
-	loaded_data = SaveData.new(index, data.get("profile_name", ""), player_position)
+	loaded_data = SaveData.new(data, index)
 
 	StatsManager.stats.load_from_dict(data.get("stats", {}))
-	CollectablesManager.set_collectables_from_dictionary(data.get("collectables", []) as Array)
-	AchievementManager.ready()
+	AchievementManager.prepare_achievements()
 	
 	if reload_current_scene:
 		get_tree().reload_current_scene()

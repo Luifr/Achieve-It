@@ -2,6 +2,7 @@ class_name SaveSlot
 extends PanelContainer
 
 @export var profile_name_label: Label
+@export var achievement_stat_label: Label
 
 var loaded_data: SaveData
 
@@ -9,6 +10,8 @@ const GAME = preload("uid://drlpxnsx3p7x0")
 
 func _ready() -> void:
 	profile_name_label.text = loaded_data.profile_name
+	# TODO: after achievement completed are saved in file, update text here
+	#achievement_stat_label.text = loaded_data.
 
 func _on_load_button_pressed() -> void:
 	SaveDataManager.loaded_data = loaded_data

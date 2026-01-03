@@ -1,89 +1,100 @@
 [
 	{
+		"id": "SD001",
 		"title": "What happened?",
 		"description": "There is a first time for everything",
 		"unlock_type": "stat_target",
 		"target_name": "death",
-		"value_target": 1,
+		"value_target": 1.0,
 		"unlocked": false
 	},
 	{
+		"id": "SD002",
 		"title": "Again?",
 		"description": "There is a fifth time for everything",
 		"unlock_type": "stat_target",
 		"target_name": "death",
-		"value_target": 5,
+		"value_target": 5.0,
 		"unlocked": false
 	},
 	{
+		"id": "CC001",
 		"title": "Shiny",
 		"description": "What can i use it for?",
 		"unlock_type": "collectable_target",
 		"target_name": "coin",
-		"value_target": 1,
+		"value_target": 1.0,
 		"unlocked": false
 	},
 	{
+		"id": "CC002",
 		"title": "Start a business",
 		"description": "5 coins is a lot",
 		"unlock_type": "collectable_target",
 		"target_name": "coin",
-		"value_target": 5,
+		"value_target": 5.0,
 		"unlocked": false
 	},
 	{
+		"id": "SJ001",
 		"title": "Off the ground",
 		"description": "Get off the ground",
 		"unlock_type": "stat_target",
 		"target_name": "jump",
-		"value_target": 1,
+		"value_target": 1.0,
 		"unlocked": false
 	},
 	{
+		"id": "SJ002",
 		"title": "Going higher",
 		"description": "Jump 10 times",
 		"unlock_type": "stat_target",
 		"target_name": "jump",
-		"value_target": 10,
+		"value_target": 10.0,
 		"unlocked": false
 	},
 	{
+		"id": "SJ003",
 		"title": "Jumping jumping",
 		"description": "Jump 20 times",
 		"unlock_type": "stat_target",
 		"target_name": "jump",
-		"value_target": 20,
+		"value_target": 20.0,
 		"unlocked": false
 	},
 	{
+		"id": "SW001",
 		"title": "Let's get warm",
 		"description": "Walk 50 meters",
 		"unlock_type": "stat_target",
 		"target_name": "distance_walked",
-		"value_target": 50,
+		"value_target": 50.0,
 		"unlocked": false
 	},
 	{
+		"id": "SW002",
 		"title": "I'm on fire",
 		"description": "Walk 150 meters",
 		"unlock_type": "stat_target",
 		"target_name": "distance_walked",
-		"value_target": 150,
+		"value_target": 150.0,
 		"unlocked": false
 	},
 	{
+		"id": "SW003",
 		"title": "I'm on fire 2",
 		"description": "Walk 200 meters",
 		"unlock_type": "stat_target",
 		"target_name": "distance_walked",
-		"value_target": 200,
+		"value_target": 200.0,
 		"unlocked": false
 	},
 	{
+		"id": "A001",
 		"title": "Achievement hunter",
 		"description": "Unlock 10 achievements",
 		"unlock_type": "achievement_target",
-		"value_target": 10,
+		"value_target": 10.0,
 		"unlocked": false
 	}
 ]

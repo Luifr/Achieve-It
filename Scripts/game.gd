@@ -8,6 +8,7 @@ const ACHIEVEMENT_UNLOCKED_TOAST = preload("uid://c2letqrlfob0r")
 func _ready() -> void:
 	pause_menu.hide()
 	
+	CollectablesManager.set_collectables()
 	AchievementManager.achievement_unlocked.connect(create_achievement_unlocked_toast)
 
 func _input(event: InputEvent) -> void:

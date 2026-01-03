@@ -17,31 +17,27 @@ var achievement_handlers: Dictionary[Achievement.UnlockType, AchievementHandler]
 
 signal achievement_unlocked(achievement: Achievement)
 
-func stat_try_unlock_achievements(target_name: String, new_value: Variant) -> void:
-	achievement_handlers[Achievement.UnlockType.STAT_TARGET].try_unlock_achievements({
-		"target_name": target_name,
-		"new_value": new_value
-	})
+func _ready() -> void:
+	StatsManager.stat_changed.connect(func(target_name: String, new_value: Variant) -> void:
+		achievement_handlers[Achievement.UnlockType.STAT_TARGET].try_unlock_achievements({
+			"target_name": target_name,
+			"new_value": new_value
+		})
+	)
 
-func collectable_try_unlock_achievements(_collectable_id: String, collectable_type: String) -> void:
-	achievement_handlers[Achievement.UnlockType.COLLECTABLE_TARGET].try_unlock_achievements({
-		"collectable_type": collectable_type
-	})
+	CollectablesManager.collectable_collected.connect(func(_collectable_id: String, collectable_type: String) -> void:
+		achievement_handlers[Achievement.UnlockType.COLLECTABLE_TARGET].try_unlock_achievements({
+			"collectable_type": collectable_type
+		})
+	)
 
-func achievement_try_unlock_achievements(_achievement: Achievement) -> void:
-	achievement_handlers[Achievement.UnlockType.ACHIEVEMENT_TARGET].try_unlock_achievements({})
+	achievement_unlocked.connect(func(_achievement: Achievement) -> void:
+		achievement_handlers[Achievement.UnlockType.ACHIEVEMENT_TARGET].try_unlock_achievements({})
+	)
 
-func ready() -> void:
-	if !StatsManager.stat_changed.is_connected(stat_try_unlock_achievements):
-		StatsManager.stat_changed.connect(stat_try_unlock_achievements)
-
-	if !CollectablesManager.collectable_collected.is_connected(collectable_try_unlock_achievements):
-		CollectablesManager.collectable_collected.connect(collectable_try_unlock_achievements)
-
-	if !achievement_unlocked.is_connected(achievement_try_unlock_achievements):
-		achievement_unlocked.connect(achievement_try_unlock_achievements)
-
-	prepare_achievements()
+func reset_data() -> void:
+	for achievement in all_achievements:
+		achievement.unlocked = false
 
 func prepare_achievements() -> void:
 	all_achievements = []
@@ -80,7 +76,7 @@ func process_achievements_json(json_data: Array) -> void:
 
 		all_achievements.append(entry)
 
-		if achievement_handlers[entry.unlock_type].check_can_unlock_achievement(entry):
+		if SaveDataManager.loaded_data.achievements.get(entry.id, false):
 			entry.unlocked = true
 
 		if entry.unlock_type == Achievement.UnlockType.STAT_TARGET:
@@ -111,3 +107,11 @@ func is_achievement_unlocked(achievement: Achievement) -> bool:
 
 func get_amount_of_unlocked_achievements() -> int:
 	return all_achievements.filter(is_achievement_unlocked).size()
+
+func to_saved_achievements() -> Dictionary[String, bool]:
+	return all_achievements.reduce(
+		func(acc: Dictionary[String, bool], achievement: Achievement) -> Dictionary[String, bool]:
+			acc[achievement.id] = achievement.unlocked
+			return acc,
+		{} as Dictionary[String, bool]
+	)
