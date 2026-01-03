@@ -19,26 +19,10 @@ func add_collectable(collectable_id: String, collectable_type: String) -> void:
 	if collectables.has(collectable_id):
 		return
 
-	var collectable := Collectable.new(collectable_id, collectable_type)
+	var collectable := Collectable.new(collectable_id, collectable_type, SaveDataManager.loaded_data.collectables.get(collectable_id, false))
 	collectables.set(collectable_id, collectable)
 	all_collectables.append(collectable)
 	(collectables_per_type.get_or_add(collectable.type, CollectablesArray.new()) as CollectablesArray).collectables.append(collectable)
-
-func set_collectables() -> void:
-	collectables = {}
-	all_collectables = []
-	collectables_per_type = {}
-
-	for node: Node in get_tree().get_nodes_in_group("collectable"):
-		var collectable := Collectable.new(
-			node.collectable_id,
-			node.collectable_type,
-			SaveDataManager.loaded_data.collectables.get("collectable_id", false)
-		)
-
-		collectables.set(node.collectable_id, collectable)
-		all_collectables.append(collectable)
-		(collectables_per_type.get_or_add(collectable.type, CollectablesArray.new()) as CollectablesArray).collectables.append(collectable)
 
 func to_saved_collectables() -> Dictionary[String, bool]:
 	return all_collectables.reduce(

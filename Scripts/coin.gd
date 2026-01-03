@@ -10,11 +10,10 @@ func _ready() -> void:
 		printerr("Coin does not have collectable id: " + get_path().get_concatenated_names())
 		return
 
-	if CollectablesManager.collectables.has(collectable_id):
-		if CollectablesManager.collectables[collectable_id].is_collected:
+	CollectablesManager.add_collectable(collectable_id, collectable_type)
+	if SaveDataManager.loaded_data.collectables.get(collectable_id, false) == true:
+		if SaveDataManager.loaded_data.collectables[collectable_id] :
 			queue_free()
-	else:
-		CollectablesManager.add_collectable(collectable_id, collectable_type)
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if !body is Player:
