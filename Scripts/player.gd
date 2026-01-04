@@ -10,18 +10,46 @@ const CAMERA_2D = preload("uid://bt6eq5c6omec0")
 
 const LETHAL_LAYER = 8
 
-const SPEED: float = 200.0
-const MAX_JUMP_VELOCITY: float = -400.0
-const JUMP_VELOCITY_DIVISOR: float = 4.0
+enum PlayerState {
+	IDLE,
+	WALK,
+	JUMP,
+	FALL,
+	CLIMB
+}
 
-const CLIMB_SPEED = -200
+var current_state := PlayerState.IDLE
+
+var process_state: Dictionary[PlayerState, Callable] = {
+	PlayerState.IDLE: process_idle_state,
+	PlayerState.WALK: process_walk_state,
+	PlayerState.JUMP: process_jump_state,
+	PlayerState.FALL: process_fall_state,
+	PlayerState.CLIMB: process_climb_state,
+}
+
+var on_enter_state: Dictionary[PlayerState, Callable] = {
+	PlayerState.IDLE: on_idle_state,
+	PlayerState.WALK: on_walk_state,
+	PlayerState.JUMP: on_jump_state,
+	#PlayerState.FALL: on_fall_state,
+	#PlayerState.CLIMB: on_climb_state
+}
+
+const SPEED: float = 200.0
+const INITIAL_JUMP_Speed: float = -170.0
+const HOLD_JUMP_VELOCITY: float = -180.0
+
+const CLIMB_SPEED: int = -200
 
 const MAX_JUMP_DELAY_AFTER_NOT_ON_FLOOR: float = 0.08
 var time_since_left_floor: float = 0.0
 
-var is_jumping: bool = false
-var jump_velocity_used: float = 0.0
-var stoped_jumping: bool = false
+const MAX_JUMP_TIME := 0.2
+var jump_time_used := 0.0
+
+var MAX_JUMPS := 1
+var jumps_used := 0
 
 var overlapping_areas: Array[CollisionShape2D] = []
 
@@ -53,46 +81,13 @@ func _ready() -> void:
 		position = SaveDataManager.loaded_data.player_position
 
 func _physics_process(delta: float) -> void:
-	var on_floor: bool = is_on_floor()
-	
+	assert(process_state.has(current_state), "Missing function to process state %s" % current_state)
+
 	# Add the gravity.
-	if not on_floor:
+	if not is_on_floor() and current_state != PlayerState.JUMP:
 		velocity += get_gravity() * delta
-		time_since_left_floor += delta
-	elif on_floor and time_since_left_floor > 0:
-		time_since_left_floor = 0
-		jump_velocity_used = 0.0
-		stoped_jumping = false
-
-
-	if Input.is_action_just_pressed("jump") and time_since_left_floor < MAX_JUMP_DELAY_AFTER_NOT_ON_FLOOR and !is_jumping:
-		is_jumping = true
-		StatsManager.increment_stat(Stats.StatType.JUMP)
-		velocity.y = MAX_JUMP_VELOCITY/JUMP_VELOCITY_DIVISOR
-		jump_velocity_used = MAX_JUMP_VELOCITY/JUMP_VELOCITY_DIVISOR
-	elif on_floor and is_jumping:
-		is_jumping = false
-		jump_velocity_used = 0
-	elif !on_floor and is_jumping and !stoped_jumping and Input.is_action_pressed("jump"):
-		if jump_velocity_used > MAX_JUMP_VELOCITY:
-			velocity.y += MAX_JUMP_VELOCITY/JUMP_VELOCITY_DIVISOR
-			jump_velocity_used += MAX_JUMP_VELOCITY/JUMP_VELOCITY_DIVISOR
-	elif is_jumping and !stoped_jumping and !Input.is_action_pressed("jump"):
-		stoped_jumping = true
-
-	if Input.is_action_pressed("move_up"):
-		var tile := get_tile_under_player(environment_tile_map_layer)
-
-		if tile and tile.get_custom_data("climbable"):
-			velocity.y = CLIMB_SPEED
-
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction := Input.get_axis("move_left", "move_right")
-	if direction:
-		velocity.x = direction * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+	
+	process_state[current_state].call(delta)
 	
 	if velocity.x > 0:
 		sprite_2d.flip_h = false
@@ -101,13 +96,120 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
+	check_distance_walked()
 	check_letal_tiles()
+
+func process_idle_state(delta: float) -> void:
+	try_move()
+	try_jump(delta)
 	
-	distance_walked_in_pixels_buffer += global_position.distance_to(last_position)
-	last_position = global_position
-	if distance_walked_in_pixels_buffer >= DISTANCE_WALKED_BUFFER_MAX_SIZE:
-		StatsManager.increment_stat_by(Stats.StatType.DISTANCE_WALKED, distance_walked_in_pixels_buffer / PIXEL_PER_METER_RATIO)
-		distance_walked_in_pixels_buffer = 0
+	var is_climbing := try_climb()
+	
+	if is_climbing:
+		switch_state(PlayerState.CLIMB)
+		return
+	
+	if velocity.y > 0:
+		switch_state(PlayerState.FALL)
+		return
+
+func process_walk_state(delta: float) -> void:
+	try_move()
+	try_jump(delta)
+	
+	var is_climbing := try_climb()
+	
+	if is_climbing:
+		switch_state(PlayerState.CLIMB)
+		return
+	if velocity.x == 0 and velocity.y == 0:
+		switch_state(PlayerState.IDLE)
+		return
+	if velocity.y > 0:
+		switch_state(PlayerState.FALL)
+		return
+
+func process_jump_state(delta: float) -> void:
+	jump_time_used += delta
+	
+	try_move()
+	
+	if is_on_floor():
+		switch_state(PlayerState.IDLE)
+		return
+	if Input.is_action_just_released("jump") or jump_time_used >= MAX_JUMP_TIME:
+		switch_state(PlayerState.FALL)
+		return
+
+	velocity.y += HOLD_JUMP_VELOCITY * delta
+
+func process_fall_state(delta: float) -> void:
+	time_since_left_floor += delta
+	
+	if is_on_floor():
+		switch_state(PlayerState.IDLE)
+		return
+	
+	try_move()
+	try_jump(delta)
+	
+	var is_climbing := try_climb()
+	
+	if is_climbing:
+		switch_state(PlayerState.CLIMB)
+		return
+
+func process_climb_state(_delta: float) -> void:
+	try_move()
+	var is_climbing := try_climb()
+	
+	if !is_climbing:
+		switch_state(PlayerState.FALL)
+		return
+
+func switch_state(new_state: PlayerState) -> void:
+	if on_enter_state.has(new_state):
+		on_enter_state[new_state].call()
+
+	current_state = new_state
+
+func on_idle_state() -> void:
+	jumps_used = 0
+	time_since_left_floor = 0
+	
+func on_walk_state() -> void:
+	jumps_used = 0
+	time_since_left_floor = 0
+
+func on_jump_state() -> void:
+	jump_time_used = 0.0
+	StatsManager.increment_stat(Stats.StatType.JUMP)
+
+func try_move() -> void:
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	var direction := Input.get_axis("move_left", "move_right")
+	if direction:
+		velocity.x = direction * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+
+# Returns if the player is climbing
+func try_climb() -> bool:
+	if Input.is_action_pressed("move_up"):
+		var tile := get_tile_under_player(environment_tile_map_layer)
+
+		if tile and tile.get_custom_data("climbable"):
+			velocity.y = CLIMB_SPEED
+			return true
+	return false
+
+func try_jump(_delta: float) -> void:
+	if Input.is_action_just_pressed("jump") and time_since_left_floor < MAX_JUMP_DELAY_AFTER_NOT_ON_FLOOR and jumps_used < MAX_JUMPS:
+		jumps_used += 1
+		velocity.y = INITIAL_JUMP_Speed
+		switch_state(PlayerState.JUMP)
+		return
 
 func on_area_entered(area_collision_shape_2d: CollisionShape2D) -> void:
 	overlapping_areas.append(area_collision_shape_2d)
@@ -141,6 +243,13 @@ func check_letal_tiles() -> void:
 func get_tile_under_player(tilemap: TileMapLayer) -> TileData:
 	var cell := tilemap.local_to_map(tilemap.to_local(global_position))
 	return tilemap.get_cell_tile_data(cell)
+
+func check_distance_walked() -> void:
+	distance_walked_in_pixels_buffer += global_position.distance_to(last_position)
+	last_position = global_position
+	if distance_walked_in_pixels_buffer >= DISTANCE_WALKED_BUFFER_MAX_SIZE:
+		StatsManager.increment_stat_by(Stats.StatType.DISTANCE_WALKED, distance_walked_in_pixels_buffer / PIXEL_PER_METER_RATIO)
+		distance_walked_in_pixels_buffer = 0
 
 func die() -> void:
 	StatsManager.increment_stat(Stats.StatType.DEATH)

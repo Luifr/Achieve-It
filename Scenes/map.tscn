@@ -94,7 +94,7 @@ script = ExtResource("1_dlo4w")
 tile_maps = NodePath("TileMaps")
 
 [node name="CharacterBody2D" parent="." node_paths=PackedStringArray("environment_tile_map_layer") instance=ExtResource("1_olcgw")]
-position = Vector2(319, 300)
+position = Vector2(291, 304)
 environment_tile_map_layer = NodePath("../TileMaps/MapTileMapLayer")
 
 [node name="TileMaps" type="Node" parent="."]
