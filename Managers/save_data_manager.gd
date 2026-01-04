@@ -33,12 +33,21 @@ func create_new_save(profile_name: String) -> void:
 
 	var save_index_string: String = str(new_save_index + 1)
 
+	var achievements := AchievementManager.load_achievements_from_json()
+	var achievement_unlocked_dict: Dictionary = achievements.reduce(
+		func(acc: Dictionary, achievement: Variant) -> Dictionary:
+			acc[achievement.id] = false
+			return acc,
+		{} as Dictionary
+	)
+
 	reset_local_save_data()
 	
 	var file := FileAccess.open(SAVE_DATA_PATH.format([save_index_string]), FileAccess.WRITE)
 
 	loaded_data = SaveData.new({
 		"profile_name": profile_name,
+		"achievements": achievement_unlocked_dict
 	}, save_index_string)
 
 	file.store_string(JSON.stringify(loaded_data.to_dictionary()))
