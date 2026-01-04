@@ -1,6 +1,7 @@
 extends Node2D
 
-@onready var audio_stream_player_2d: AudioStreamPlayer2D = $AudioStreamPlayer2D
+@export var audio_stream_player_2d: AudioStreamPlayer2D
+@export var area_2d: Area2D
 
 @export var collectable_id: String
 const collectable_type: String = "coin"
@@ -20,6 +21,8 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		return
 
 	hide()
+	# Disable area 2d so that player cannot collide again before audio finishes playing
+	area_2d.queue_free()
 	CollectablesManager.collect_collectable(collectable_id)
 	audio_stream_player_2d.play()
 	await audio_stream_player_2d.finished

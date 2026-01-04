@@ -9,7 +9,7 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 
-[node name="Save slot" type="PanelContainer" node_paths=PackedStringArray("profile_name_label")]
+[node name="Save slot" type="PanelContainer" node_paths=PackedStringArray("profile_name_label", "achievement_stat_label")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -18,6 +18,7 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ygstj")
 script = ExtResource("1_htkj5")
 profile_name_label = NodePath("SaveSlotHBoxContainer/ProfileNameLabel")
+achievement_stat_label = NodePath("SaveSlotHBoxContainer/AchievementStatLabel")
 
 [node name="SaveSlotHBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -33,7 +34,6 @@ size_flags_horizontal = 3
 
 [node name="AchievementStatLabel" type="Label" parent="SaveSlotHBoxContainer"]
 layout_mode = 2
-text = "14/24 (10%) Achievements unlocked"
 
 [node name="Spacer" type="Control" parent="SaveSlotHBoxContainer"]
 layout_mode = 2

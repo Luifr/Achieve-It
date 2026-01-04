@@ -10,8 +10,16 @@ const GAME = preload("uid://drlpxnsx3p7x0")
 
 func _ready() -> void:
 	profile_name_label.text = loaded_data.profile_name
-	# TODO: after achievement completed are saved in file, update text here
-	#achievement_stat_label.text = loaded_data.
+	
+	var unlocked_achievements := loaded_data.achievements.values().filter(func(is_unlocked: bool) -> bool: return is_unlocked).size()
+	var total_achievements := loaded_data.achievements.size()
+	
+	if total_achievements > 0:
+		achievement_stat_label.text = "%d/%d (%d%%) Achievements unlocked" % [
+			unlocked_achievements,
+			total_achievements,
+			int(unlocked_achievements / float(total_achievements) * 100) 
+		]
 
 func _on_load_button_pressed() -> void:
 	SaveDataManager.loaded_data = loaded_data
