@@ -1,12 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://co5e4q0jguxgk"]
+[gd_scene load_steps=7 format=3 uid="uid://co5e4q0jguxgk"]
 
 [ext_resource type="Script" uid="uid://cjdn2oiltkf6u" path="res://Scripts/main_menu.gd" id="1_u7lva"]
 [ext_resource type="Texture2D" uid="uid://cirx3mnf751k1" path="res://Assets/Art/octopus-0001.png" id="2_mrfpk"]
 [ext_resource type="PackedScene" uid="uid://dcprp8tauavip" path="res://Scenes/UI/choose_your_save.tscn" id="3_4pqbp"]
 [ext_resource type="PackedScene" uid="uid://8l31r3a0bup0" path="res://Scenes/UI/settings.tscn" id="3_mrfpk"]
 [ext_resource type="PackedScene" uid="uid://datrnd7d2hcd8" path="res://Scenes/UI/quit_game_alert.tscn" id="4_gih0s"]
+[ext_resource type="PackedScene" uid="uid://cbj74kqed15xx" path="res://Scenes/UI/credits.tscn" id="6_4pqbp"]
 
-[node name="Menu Root" type="Control" node_paths=PackedStringArray("choose_your_save", "quit_game_alert", "settings")]
+[node name="Menu Root" type="Control" node_paths=PackedStringArray("choose_your_save", "quit_game_alert", "settings", "credits")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,6 +18,7 @@ script = ExtResource("1_u7lva")
 choose_your_save = NodePath("Choose your save")
 quit_game_alert = NodePath("Quit Game Alert")
 settings = NodePath("Settings")
+credits = NodePath("Credits")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -109,6 +111,11 @@ anchor_top = 0.3
 anchor_right = 0.7
 anchor_bottom = 0.7
 
+[node name="Credits" parent="." instance=ExtResource("6_4pqbp")]
+visible = false
+layout_mode = 1
+
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Play Button" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Settings Button" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Credits Button" to="." method="_on_credits_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Quit Button" to="." method="_on_quit_button_pressed"]

@@ -33,6 +33,7 @@ func _ready() -> void:
 	if achievement.unlock_type == Achievement.UnlockType.COLLECTABLE_TARGET:
 		CollectablesManager.collectables_set.connect(
 			func() -> void:
+				progress_bar.max_value = achievement.value_target
 				progress_bar.value = CollectablesManager.get_amount_of_collected_collectables_by_type(achievement.target_name)
 		)
 

@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1u07g6bp38eb"]
+
+[ext_resource type="Script" uid="uid://cx7r623np5nal" path="res://Scripts/spaced_desciption_text.gd" id="1_ippqd"]
+
+[node name="Spaced desciption text" type="Control" node_paths=PackedStringArray("left_label", "right_label")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ippqd")
+left_label = NodePath("HBoxContainer/LeftLabel")
+right_label = NodePath("HBoxContainer/RightLabel")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RightLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2

@@ -1,10 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://krwqpvpiym6d"]
+[gd_scene load_steps=5 format=3 uid="uid://krwqpvpiym6d"]
 
 [ext_resource type="Script" uid="uid://b6owq7r00snur" path="res://Scripts/pause_menu.gd" id="1_8rf44"]
 [ext_resource type="PackedScene" uid="uid://8l31r3a0bup0" path="res://Scenes/UI/settings.tscn" id="2_oykix"]
 [ext_resource type="PackedScene" uid="uid://datrnd7d2hcd8" path="res://Scenes/UI/quit_game_alert.tscn" id="2_r2i2h"]
+[ext_resource type="PackedScene" uid="uid://h3liobh5673h" path="res://Scenes/UI/stats_modal.tscn" id="4_oykix"]
 
-[node name="Pause Menu" type="Control" node_paths=PackedStringArray("quit_game_alert", "settings")]
+[node name="Pause Menu" type="Control" node_paths=PackedStringArray("quit_game_alert", "settings", "stats_panel")]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -15,6 +16,7 @@ grow_vertical = 2
 script = ExtResource("1_8rf44")
 quit_game_alert = NodePath("Quit Game Alert")
 settings = NodePath("Settings")
+stats_panel = NodePath("StatsModal")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -56,6 +58,16 @@ layout_mode = 2
 size_flags_vertical = 4
 text = "Settings"
 
+[node name="StatsButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/Buttons"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Show game stats"
+
+[node name="MainMenuButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/Buttons"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Back to main menu"
+
 [node name="QuitButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/Buttons"]
 layout_mode = 2
 size_flags_vertical = 4
@@ -66,6 +78,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Settings" parent="." instance=ExtResource("2_oykix")]
+visible = false
 layout_mode = 1
 
 [node name="Quit Game Alert" parent="." instance=ExtResource("2_r2i2h")]
@@ -77,6 +90,12 @@ anchor_top = 0.3
 anchor_right = 0.7
 anchor_bottom = 0.7
 
+[node name="StatsModal" parent="." instance=ExtResource("4_oykix")]
+visible = false
+layout_mode = 1
+
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/Buttons/ResumeButton" to="." method="_on_resume_button_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/Buttons/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/Buttons/StatsButton" to="." method="_on_stats_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/Buttons/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/Buttons/QuitButton" to="." method="_on_quit_button_pressed"]
