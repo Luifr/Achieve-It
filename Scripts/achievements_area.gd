@@ -18,7 +18,10 @@ func _ready() -> void:
 		achievement_container.achievement = achievement
 		achievements_v_box.add_child(achievement_container)
 
-	coins_collected_label.text = str(CollectablesManager.get_amount_of_collected_collectables_by_type("coin"))
+	CollectablesManager.collectables_set.connect(
+		func() -> void:
+			coins_collected_label.text = str(CollectablesManager.get_amount_of_collected_collectables_by_type("coin"))
+	)
 
 	update_achievements_stats()
 	AchievementManager.achievement_unlocked.connect(update_achievements_stats.unbind(1))

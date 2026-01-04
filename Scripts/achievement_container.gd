@@ -30,7 +30,13 @@ func _ready() -> void:
 	
 	icon.texture = CHECK_MARK if achievement.unlocked else LOCKED_ACHIEVEMENT
 
-	if achievement.value_target:
+	if achievement.unlock_type == Achievement.UnlockType.COLLECTABLE_TARGET:
+		CollectablesManager.collectables_set.connect(
+			func() -> void:
+				progress_bar.value = CollectablesManager.get_amount_of_collected_collectables_by_type(achievement.target_name)
+		)
+
+	if achievement.value_target and achievement.unlock_type != Achievement.UnlockType.COLLECTABLE_TARGET:
 		progress_bar.max_value = achievement.value_target
 		progress_bar.value = AchievementManager.achievement_handlers[achievement.unlock_type].get_progress_value(achievement)
 
@@ -51,9 +57,7 @@ func update_collectable_target_progres(_collectable_id: String, collectable_type
 
 	if achievement.unlock_type == Achievement.UnlockType.COLLECTABLE_TARGET:
 		progress_bar.max_value = achievement.value_target
-		progress_bar.value = CollectablesManager.collectables_per_type[achievement.target_name].collectables.filter(
-			func(collectable: Collectable) -> bool: return collectable.is_collected
-		).size()
+		progress_bar.value = CollectablesManager.get_amount_of_collected_collectables_by_type(achievement.target_name)
 	else:
 		progress_bar.value = 0
 

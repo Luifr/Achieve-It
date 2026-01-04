@@ -10,8 +10,12 @@ Collected so far: %d"
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	door_1_text_label.hide()
-	if CollectablesManager.get_amount_of_collected_collectables_by_type("coin") >= coins_needed:
-		destroy_door_1()
+
+	CollectablesManager.collectables_set.connect(
+		func() -> void:
+			if CollectablesManager.get_amount_of_collected_collectables_by_type("coin") >= coins_needed:
+				destroy_door_1()
+	)
 
 func _on_body_entered(body: Node2D) -> void:
 	if !(body is Player):

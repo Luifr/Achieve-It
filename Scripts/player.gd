@@ -33,7 +33,7 @@ var on_enter_state: Dictionary[PlayerState, Callable] = {
 	PlayerState.WALK: on_walk_state,
 	PlayerState.JUMP: on_jump_state,
 	#PlayerState.FALL: on_fall_state,
-	#PlayerState.CLIMB: on_climb_state
+	PlayerState.CLIMB: on_climb_state
 }
 
 const SPEED: float = 200.0
@@ -44,6 +44,7 @@ const CLIMB_SPEED: int = -200
 
 const MAX_JUMP_DELAY_AFTER_NOT_ON_FLOOR: float = 0.08
 var time_since_left_floor: float = 0.0
+var coyote_jump_consumed: bool = false
 
 const MAX_JUMP_TIME := 0.2
 var jump_time_used := 0.0
@@ -77,6 +78,8 @@ func _ready() -> void:
 	initial_position = position
 	last_position = position
 	
+	MAX_JUMPS = 1
+	
 	if SaveDataManager.loaded_data.player_position != Vector2.INF:
 		position = SaveDataManager.loaded_data.player_position
 
@@ -99,6 +102,7 @@ func _physics_process(delta: float) -> void:
 	check_distance_walked()
 	check_letal_tiles()
 
+#region Process state
 func process_idle_state(delta: float) -> void:
 	try_move()
 	try_jump(delta)
@@ -133,6 +137,7 @@ func process_jump_state(delta: float) -> void:
 	jump_time_used += delta
 	
 	try_move()
+	try_jump(delta)
 	
 	if is_on_floor():
 		switch_state(PlayerState.IDLE)
@@ -144,14 +149,19 @@ func process_jump_state(delta: float) -> void:
 	velocity.y += HOLD_JUMP_VELOCITY * delta
 
 func process_fall_state(delta: float) -> void:
+	try_jump(delta)
+
 	time_since_left_floor += delta
+	
+	# Only consume coyote jump for first jump
+	if time_since_left_floor > MAX_JUMP_DELAY_AFTER_NOT_ON_FLOOR and jumps_used == 0:
+		coyote_jump_consumed = true
 	
 	if is_on_floor():
 		switch_state(PlayerState.IDLE)
 		return
 	
 	try_move()
-	try_jump(delta)
 	
 	var is_climbing := try_climb()
 	
@@ -167,23 +177,42 @@ func process_climb_state(_delta: float) -> void:
 		switch_state(PlayerState.FALL)
 		return
 
+#endregion
+
 func switch_state(new_state: PlayerState) -> void:
 	if on_enter_state.has(new_state):
 		on_enter_state[new_state].call()
 
 	current_state = new_state
 
+#region On state
 func on_idle_state() -> void:
 	jumps_used = 0
 	time_since_left_floor = 0
+	coyote_jump_consumed = false
 	
 func on_walk_state() -> void:
 	jumps_used = 0
 	time_since_left_floor = 0
+	coyote_jump_consumed = false
 
 func on_jump_state() -> void:
+	match jumps_used:
+		0:
+			StatsManager.increment_stat(Stats.StatType.JUMP)
+		1:
+			StatsManager.increment_stat(Stats.StatType.DOUBLE_JUMP)
+	
 	jump_time_used = 0.0
-	StatsManager.increment_stat(Stats.StatType.JUMP)
+	jumps_used += 1
+	velocity.y = INITIAL_JUMP_Speed
+
+func on_climb_state() -> void:
+	# Consume one jump when starting using ladders
+	# So that player can't jump out of the ladder
+	jumps_used = 1
+
+#endregion
 
 func try_move() -> void:
 	# Get the input direction and handle the movement/deceleration.
@@ -205,9 +234,7 @@ func try_climb() -> bool:
 	return false
 
 func try_jump(_delta: float) -> void:
-	if Input.is_action_just_pressed("jump") and time_since_left_floor < MAX_JUMP_DELAY_AFTER_NOT_ON_FLOOR and jumps_used < MAX_JUMPS:
-		jumps_used += 1
-		velocity.y = INITIAL_JUMP_Speed
+	if Input.is_action_just_pressed("jump") and (jumps_used + (1 if coyote_jump_consumed else 0)) < MAX_JUMPS:
 		switch_state(PlayerState.JUMP)
 		return
 

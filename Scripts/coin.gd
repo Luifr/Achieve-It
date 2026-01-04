@@ -11,7 +11,6 @@ func _ready() -> void:
 		printerr("Coin does not have collectable id: " + get_path().get_concatenated_names())
 		return
 
-	CollectablesManager.add_collectable(collectable_id, collectable_type)
 	if SaveDataManager.loaded_data.collectables.get(collectable_id, false) == true:
 		if SaveDataManager.loaded_data.collectables[collectable_id] :
 			queue_free()

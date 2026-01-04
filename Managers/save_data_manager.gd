@@ -111,6 +111,7 @@ func load_data_at_index(index: String, reload_current_scene := true) -> void:
 
 	loaded_data = SaveData.new(data, index)
 
+	CollectablesManager.reset_data()
 	StatsManager.stats.load_from_dict(data.get("stats", {}))
 	AchievementManager.prepare_achievements()
 	
