@@ -53,7 +53,6 @@ func _ready() -> void:
 	)
 
 func reset_data() -> void:
-	print("reset a data")
 	is_unlocked_filter = IS_UNLOCKED_FILTER.ALL
 	
 	for key: Achievement.UnlockType in unlock_type_filter.keys():
@@ -62,9 +61,6 @@ func reset_data() -> void:
 	all_achievements = []
 	stat_achievements_hash = {}
 	achievement_achievements_array = AchievementsArray.new()
-
-	# for achievement in all_achievements:
-	# 	achievement.unlocked = false
 
 func prepare_achievements() -> void:
 	reset_data()

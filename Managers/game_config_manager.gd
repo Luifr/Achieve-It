@@ -58,7 +58,8 @@ func save_current_configs() -> void:
 	if err != OK and err != ERR_FILE_NOT_FOUND:
 		push_error("Problem when reading config file for saving, error code: %d" % err)
 		return
-
+ 
+	# Saving resolution after screen manual resize will result in invalid option showed in resolution dropdown in settings menu.
 	# config.set_value("Video", "resolution", DisplayServer.window_get_size())
 	config.set_value("Video", "window_mode", DisplayServer.window_get_mode())
 	

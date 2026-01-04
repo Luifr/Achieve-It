@@ -5,8 +5,7 @@
 		"description": "There is a first time for everything",
 		"unlock_type": "stat_target",
 		"target_name": "death",
-		"value_target": 1.0,
-		"unlocked": false
+		"value_target": 1.0
 	},
 	{
 		"id": "SD002",
@@ -14,8 +13,7 @@
 		"description": "There is a fifth time for everything",
 		"unlock_type": "stat_target",
 		"target_name": "death",
-		"value_target": 5.0,
-		"unlocked": false
+		"value_target": 5.0
 	},
 	{
 		"id": "CC001",
@@ -23,8 +21,7 @@
 		"description": "What can i use it for?",
 		"unlock_type": "collectable_target",
 		"target_name": "coin",
-		"value_target": 1.0,
-		"unlocked": false
+		"value_target": 1.0
 	},
 	{
 		"id": "CC002",
@@ -32,8 +29,7 @@
 		"description": "5 coins is a lot",
 		"unlock_type": "collectable_target",
 		"target_name": "coin",
-		"value_target": 5.0,
-		"unlocked": false
+		"value_target": 5.0
 	},
 	{
 		"id": "SJ001",
@@ -41,8 +37,7 @@
 		"description": "Get off the ground",
 		"unlock_type": "stat_target",
 		"target_name": "jump",
-		"value_target": 1.0,
-		"unlocked": false
+		"value_target": 1.0
 	},
 	{
 		"id": "SJ002",
@@ -50,8 +45,7 @@
 		"description": "Jump 10 times",
 		"unlock_type": "stat_target",
 		"target_name": "jump",
-		"value_target": 10.0,
-		"unlocked": false
+		"value_target": 10.0
 	},
 	{
 		"id": "SJ003",
@@ -59,8 +53,7 @@
 		"description": "Jump 20 times",
 		"unlock_type": "stat_target",
 		"target_name": "jump",
-		"value_target": 20.0,
-		"unlocked": false
+		"value_target": 20.0
 	},
 	{
 		"id": "SW001",
@@ -68,8 +61,7 @@
 		"description": "Walk 50 meters",
 		"unlock_type": "stat_target",
 		"target_name": "distance_walked",
-		"value_target": 50.0,
-		"unlocked": false
+		"value_target": 50.0
 	},
 	{
 		"id": "SW002",
@@ -77,8 +69,7 @@
 		"description": "Walk 150 meters",
 		"unlock_type": "stat_target",
 		"target_name": "distance_walked",
-		"value_target": 150.0,
-		"unlocked": false
+		"value_target": 150.0
 	},
 	{
 		"id": "SW003",
@@ -86,15 +77,13 @@
 		"description": "Walk 200 meters",
 		"unlock_type": "stat_target",
 		"target_name": "distance_walked",
-		"value_target": 200.0,
-		"unlocked": false
+		"value_target": 200.0
 	},
 	{
 		"id": "A001",
 		"title": "Achievement hunter",
 		"description": "Unlock 10 achievements",
 		"unlock_type": "achievement_target",
-		"value_target": 10.0,
-		"unlocked": false
+		"value_target": 10.0
 	}
 ]

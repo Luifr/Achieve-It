@@ -28,9 +28,6 @@ func add_achievements_to_list() -> void:
 	for child: Node in achievements_v_box.get_children():
 		child.queue_free()
 	
-	print(AchievementManager.unlock_type_filter)
-	print(AchievementManager.is_unlocked_filter)
-	
 	# For each achievement instantiate a achievement container and add a child
 	for achievement in AchievementManager.all_achievements:
 		if !AchievementManager.unlock_type_filter[achievement.unlock_type]:

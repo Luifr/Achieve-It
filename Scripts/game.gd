@@ -18,7 +18,7 @@ func _input(event: InputEvent) -> void:
 	# Only handle escape action pressed
 	if !event.is_action_pressed("escape"):
 		return
-	print("esc")
+
 	if !achievements_filter.visible and !pause_menu.visible:
 		get_tree().paused = true
 		pause_menu.show()

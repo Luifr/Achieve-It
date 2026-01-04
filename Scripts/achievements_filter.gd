@@ -1,5 +1,5 @@
 extends Control
-# TODO: test, improve this
+# TODO: test, improve this script, filters are pretty shit right now
 @onready var item_list: ItemList = $PanelContainer/MarginContainer/VBoxContainer/FiltersVBoxContainer/HBoxContainer/ItemList
 
 var item_text_to_unlock_type: Dictionary[String, Achievement.UnlockType] = {
