@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://duvttncvgjmvc"]
+[gd_scene load_steps=6 format=3 uid="uid://duvttncvgjmvc"]
 
 [ext_resource type="Script" uid="uid://bcsmnmcjwasr1" path="res://Scripts/achievements_area.gd" id="1_b4or2"]
 
@@ -22,6 +22,9 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6so8l"]
+bg_color = Color(0.63329476, 0.5450061, 0.815666, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b4or2"]
 content_margin_top = 25.0
@@ -62,7 +65,13 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 38
 text = "Achievements"
 
+[node name="AchievementFilterButton" type="Button" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_6so8l")
+text = "Open filters"
+
 [node name="ScrollContainer" type="ScrollContainer" parent="PanelContainerBackgroud/PanelContainer/MainVBoxContainer"]
+process_mode = 3
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_vertical = 3
@@ -141,6 +150,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 text = "Back"
 
+[connection signal="pressed" from="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/AchievementFilterButton" to="." method="_on_achievement_filter_button_pressed"]
 [connection signal="pressed" from="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3/Save" to="." method="_on_save_pressed"]
 [connection signal="pressed" from="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3/Load" to="." method="_on_load_pressed"]
 [connection signal="pressed" from="PanelContainerBackgroud/PanelContainer/MainVBoxContainer/PanelContainer/InfoVBoxContainer/HBoxContainer3/Back" to="." method="_on_back_pressed"]

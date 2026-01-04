@@ -1,0 +1,99 @@
+[gd_scene load_steps=3 format=3 uid="uid://c1mc5hwmsdj3t"]
+
+[ext_resource type="Script" uid="uid://6oc7cocfrjvp" path="res://Scripts/achievements_filter.gd" id="1_5m4rn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rbdi7"]
+bg_color = Color(0.14901961, 0.047058824, 0.19215687, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[node name="AchievementsFilter" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5m4rn")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rbdi7")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 30
+text = "Achievements Filters"
+
+[node name="FiltersVBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/FiltersVBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/FiltersVBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Unlock type"
+
+[node name="Control" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/FiltersVBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ItemList" type="ItemList" parent="PanelContainer/MarginContainer/VBoxContainer/FiltersVBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+select_mode = 2
+item_count = 3
+item_0/text = "Stats"
+item_1/text = "Collectables"
+item_2/text = "Achievement amount"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/FiltersVBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/FiltersVBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Is unlocked"
+
+[node name="Spacer" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/FiltersVBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="OptionButton" type="OptionButton" parent="PanelContainer/MarginContainer/VBoxContainer/FiltersVBoxContainer/HBoxContainer2"]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Show all"
+popup/item_0/id = 0
+popup/item_1/text = "Unlocked"
+popup/item_1/id = 1
+popup/item_2/text = "Not unlocked"
+popup/item_2/id = 2
+
+[node name="Spacer" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BackButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[connection signal="item_clicked" from="PanelContainer/MarginContainer/VBoxContainer/FiltersVBoxContainer/HBoxContainer/ItemList" to="." method="_on_item_list_item_clicked"]
+[connection signal="item_selected" from="PanelContainer/MarginContainer/VBoxContainer/FiltersVBoxContainer/HBoxContainer2/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

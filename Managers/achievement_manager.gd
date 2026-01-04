@@ -2,7 +2,20 @@ extends Node
 
 var all_achievements: Array[Achievement] = []
 
-# TODO: create a Dictionary for triggered achievements
+var unlock_type_filter: Dictionary[Achievement.UnlockType, bool] = {
+	Achievement.UnlockType.STAT_TARGET: true,
+	Achievement.UnlockType.COLLECTABLE_TARGET: true,
+	Achievement.UnlockType.ACHIEVEMENT_TARGET: true
+}
+
+enum IS_UNLOCKED_FILTER {
+	ALL,
+	TRUE,
+	FALSE
+}
+
+var is_unlocked_filter: IS_UNLOCKED_FILTER = IS_UNLOCKED_FILTER.ALL
+
 var stat_achievements_hash: Dictionary[String, AchievementsArray]
 var collectable_achievements_hash: Dictionary[String, AchievementsArray]
 var achievement_achievements_array: AchievementsArray
@@ -13,8 +26,12 @@ var achievement_handlers: Dictionary[Achievement.UnlockType, AchievementHandler]
 	Achievement.UnlockType.STAT_TARGET: StatTargetHandler.new(),
 	Achievement.UnlockType.COLLECTABLE_TARGET: CollectableTargetHandler.new(),
 	Achievement.UnlockType.ACHIEVEMENT_TARGET: AchievementTargetHandler.new()
-} 
+}
 
+@warning_ignore("unused_signal")
+signal open_achievements_filter
+@warning_ignore("unused_signal")
+signal filters_changed
 signal achievement_unlocked(achievement: Achievement)
 
 func _ready() -> void:
@@ -36,13 +53,21 @@ func _ready() -> void:
 	)
 
 func reset_data() -> void:
-	for achievement in all_achievements:
-		achievement.unlocked = false
-
-func prepare_achievements() -> void:
+	print("reset a data")
+	is_unlocked_filter = IS_UNLOCKED_FILTER.ALL
+	
+	for key: Achievement.UnlockType in unlock_type_filter.keys():
+		unlock_type_filter[key] = true
+	
 	all_achievements = []
 	stat_achievements_hash = {}
 	achievement_achievements_array = AchievementsArray.new()
+
+	# for achievement in all_achievements:
+	# 	achievement.unlocked = false
+
+func prepare_achievements() -> void:
+	reset_data()
 
 	var json_data := load_achievements_from_json()
 	process_achievements_json(json_data)
